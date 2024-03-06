@@ -1,6 +1,7 @@
 import { ArraySelector, ArrayCompressSelector } from "./selectors";
-import { normalizeIndex } from './utils';
+import { normalizeIndex } from "./utils";
 import { KeyError } from './excpetions';
+import { NormalizedSlice, Slice } from "./structs";
 
 export class ArrayView<T> {
   public readonly loc: Array<T>;
@@ -70,6 +71,8 @@ export class ArrayView<T> {
   protected convertIndex(i: number): number {
     return normalizeIndex(i, this.source.length);
   }
+
+  // TODO apply(callable)
 }
 
 export class ArrayIndexListView<T> extends ArrayView<T> {
@@ -117,27 +120,15 @@ export class ArrayCompressView<T> extends ArrayIndexListView<T> {
 }
 
 export class ArraySliceView<T> extends ArrayView<T> {
-  public readonly _start: number;
-  public readonly _end: number;
-  public readonly step: number;
+  public readonly slice: NormalizedSlice;
 
-  constructor(source: Array<T>, start: number, end: number, step: number, parentView?: ArrayView<T>) {
+  constructor(source: Array<T>, slice: Slice, parentView?: ArrayView<T>) {
     super(source, parentView);
-    this.step = step;
-    this._start = start;
-    this._end = end;
+    this.slice = slice.normalize(this.parentLength);
   }
 
   get length(): number {
-    return Math.ceil((this.end - this.start) / this.step);
-  }
-
-  get start(): number {
-    return this.squeezeInBounds(normalizeIndex(this._start, this.parentLength, false));
-  }
-
-  get end(): number {
-    return this.squeezeInBounds(normalizeIndex(this._end, this.parentLength+1, false));
+    return this.slice.length;
   }
 
   *[Symbol.iterator](): IterableIterator<T> {
@@ -147,17 +138,6 @@ export class ArraySliceView<T> extends ArrayView<T> {
   }
 
   protected convertIndex(i: number): number {
-    const index = this.start + normalizeIndex(i, this.length, false) * this.step;
-
-    return index;
-    // return normalizeIndex(
-    //   this.start + normalizeIndex(i, this.length, false) * this.step,
-    //   this.parentLength,
-    //   false,
-    // );
-  }
-
-  private squeezeInBounds(i: number): number {
-    return Math.max(0, Math.min(this.parentLength, i))
+    return this.slice.convertIndex(i);
   }
 }
