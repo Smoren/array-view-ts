@@ -133,11 +133,11 @@ export class ArraySliceView<T> extends ArrayView<T> {
   }
 
   get start(): number {
-    return normalizeIndex(this._start, this.parentLength);
+    return this.squeezeInBounds(normalizeIndex(this._start, this.parentLength, false));
   }
 
   get end(): number {
-    return normalizeIndex(this._end, this.parentLength+1);
+    return this.squeezeInBounds(normalizeIndex(this._end, this.parentLength+1, false));
   }
 
   *[Symbol.iterator](): IterableIterator<T> {
@@ -147,6 +147,17 @@ export class ArraySliceView<T> extends ArrayView<T> {
   }
 
   protected convertIndex(i: number): number {
-    return normalizeIndex(this.start + normalizeIndex(i, this.length) * this.step, this.parentLength);
+    const index = this.start + normalizeIndex(i, this.length, false) * this.step;
+
+    return index;
+    // return normalizeIndex(
+    //   this.start + normalizeIndex(i, this.length, false) * this.step,
+    //   this.parentLength,
+    //   false,
+    // );
+  }
+
+  private squeezeInBounds(i: number): number {
+    return Math.max(0, Math.min(this.parentLength, i))
   }
 }
