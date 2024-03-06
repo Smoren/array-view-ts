@@ -1,4 +1,5 @@
 import { ArrayCompressView, ArrayIndexListView, ArraySliceView, ArrayView } from "./views";
+import { Slice } from "./structs";
 
 export abstract class ArraySelector<T> {
   public readonly value: T;
@@ -30,8 +31,12 @@ export class ArrayCompressSelector extends ArraySelector<Array<boolean>> {
   }
 }
 
-export class ArraySliceSelector extends ArraySelector<[number, number?, number?]> {
+export class ArraySliceSelector extends ArraySelector<Slice> {
+  constructor(slice: Slice | string) {
+    super(slice instanceof Slice ? slice : Slice.fromString(slice));
+  }
+
   public select<T>(source: ArrayView<T>): ArraySliceView<T> {
-    return new ArraySliceView<T>(source.loc, this.value[0], this.value[1] ?? -1, this.value[2] ?? 1, source);
+    return new ArraySliceView<T>(source.loc, this.value, source);
   }
 }
