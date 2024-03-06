@@ -125,6 +125,7 @@ export class ArraySliceView<T> extends ArrayView<T> {
   constructor(source: Array<T>, slice: Slice, parentView?: ArrayView<T>) {
     super(source, parentView);
     this.slice = slice.normalize(this.parentLength);
+    const a = 1;
   }
 
   get length(): number {

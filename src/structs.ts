@@ -39,10 +39,10 @@ export class Slice {
     step = Math.round(step)
 
     start = normalizeIndex(start, containerLength, false);
-    end = normalizeIndex(end, containerLength + 1, false);
+    end = normalizeIndex(end, containerLength, false);
 
-    start = this.squeezeInBounds(start, 0, containerLength);
-    end = this.squeezeInBounds(end, 0, containerLength + 1);
+    start = this.squeezeInBounds(start, 0, containerLength - 1);
+    end = this.squeezeInBounds(end, 0, containerLength);
 
     if ((step > 0 && end < start) || (step < 0 && end > start)) {
       end = start;
@@ -73,7 +73,7 @@ export class NormalizedSlice extends Slice {
   }
 
   get length(): number {
-    return Math.ceil((this.end - this.start) / this.step);
+    return Math.ceil(Math.abs(((this.end - this.start) / this.step)));
   }
 
   public convertIndex(i: number): number {
