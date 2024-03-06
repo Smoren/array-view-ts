@@ -21,7 +21,7 @@ export class ArrayIndexListSelector extends ArraySelector<Array<number>> {
 }
 
 export class ArrayCompressSelector extends ArraySelector<Array<boolean>> {
-  public select<T>(source: ArrayView<T>): ArrayIndexListView<T> {
+  public select<T>(source: ArrayView<T>): ArrayCompressView<T> {
     return new ArrayCompressView<T>(source.loc, this.value);
   }
 

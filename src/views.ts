@@ -1,18 +1,21 @@
 import { ArraySelector, ArrayCompressSelector } from "./selectors";
+import { normalizeIndex } from './utils';
 
 export abstract class ArrayView<T> {
   public readonly loc: Array<T>;
   public abstract readonly length: number;
+  protected readonly source: Array<T>;
 
   protected constructor(source: Array<T>, handler: ProxyHandler<Array<T>>) {
     this.loc = new Proxy(source, handler);
+    this.source = source;
   }
 
   public abstract toArray(): Array<T>;
 
   abstract [Symbol.iterator](): IterableIterator<T>;
 
-  public filter(predicate: (value: T) => boolean): ArrayView<T> {
+  public filter(predicate: (value: T) => boolean): ArrayCompressView<T> {
     return this.is(predicate).select(this);
   }
 
@@ -27,6 +30,8 @@ export abstract class ArrayView<T> {
   public subview(selector: ArraySelector<any>): ArrayView<T> {
     return selector.select(this);
   }
+
+  protected abstract convertIndex(index: number): number;
 }
 
 export class ArrayFullView<T> extends ArrayView<T> {
@@ -45,6 +50,10 @@ export class ArrayFullView<T> extends ArrayView<T> {
   *[Symbol.iterator](): IterableIterator<T> {
     yield *this.loc;
   }
+
+  protected convertIndex(i: number): number {
+    return normalizeIndex(i, this.source.length);
+  }
 }
 
 export class ArrayIndexListView<T> extends ArrayView<T> {
@@ -53,16 +62,10 @@ export class ArrayIndexListView<T> extends ArrayView<T> {
   constructor(source: Array<T>, indexes: number[]) {
     super(source, {
       get: (target, prop): T => {
-        if (!(prop in this.indexes)) {
-          throw new Error(`Invalid index ${String(prop)}`);
-        }
-        return target[this.indexes[Number(prop)]];
+        return target[this.convertIndex(Number(prop))];
       },
       set: (target, prop, value) => {
-        if (!(prop in this.indexes)) {
-          throw new Error(`Invalid index ${String(prop)}`);
-        }
-        target[this.indexes[Number(prop)]] = value;
+        target[this.convertIndex(Number(prop))] = value;
         return true;
       },
     });
@@ -81,6 +84,10 @@ export class ArrayIndexListView<T> extends ArrayView<T> {
     for (let i = 0; i < this.length; i++) {
       yield this.loc[i];
     }
+  }
+
+  protected convertIndex(i: number): number {
+    return normalizeIndex(this.indexes[normalizeIndex(i, this.indexes.length)], this.source.length);
   }
 }
 
@@ -135,7 +142,7 @@ export class ArraySliceView<T> extends ArrayView<T> {
     }
   }
 
-  private convertIndex(i: number): number {
-    return this.start + i * this.step;
+  protected convertIndex(i: number): number {
+    return normalizeIndex(this.start + normalizeIndex(i, this.source.length) * this.step, this.length);
   }
 }
