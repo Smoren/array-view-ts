@@ -11,11 +11,11 @@ export abstract class ArrayView<T> {
   public abstract toArray(): Array<T>;
 
   public filter(predicate: (value: T) => boolean): ArrayView<T> {
-    throw new Error("Method not implemented."); // TODO
+    return this.is(predicate).select(this);
   }
 
   public is(predicate: (value: T) => boolean): ArrayCompressSelector {
-    throw new Error("Method not implemented."); // TODO
+    return new ArrayCompressSelector(this.toArray().map(predicate));
   }
 
   abstract [Symbol.iterator](): IterableIterator<T>;
