@@ -1,15 +1,15 @@
-abstract class ArrayViewSelector<T, U> {
+abstract class ArrayViewSelector<T> {
   public readonly value: T;
 
-  public abstract select(source: ArrayView<U>): ArrayView<U>;
+  public abstract select<U>(source: ArrayView<U>): ArrayView<U>;
 
-  constructor(value: T) {
+  protected constructor(value: T) {
     this.value = value;
   }
 }
 
-export class IndexListSelector<T> extends ArrayViewSelector<Array<number>, T> {
-  public select(source: ArrayView<T>): ArrayIndexListView<T> {
+export class IndexListSelector extends ArrayViewSelector<Array<number>> {
+  public select<T>(source: ArrayView<T>): ArrayIndexListView<T> {
     return new ArrayIndexListView<T>(source.loc, this.value);
   }
 
@@ -18,8 +18,8 @@ export class IndexListSelector<T> extends ArrayViewSelector<Array<number>, T> {
   }
 }
 
-export class CompressSelector<T> extends ArrayViewSelector<Array<boolean>, T> {
-  public select(source: ArrayView<T>): ArrayIndexListView<T> {
+export class CompressSelector extends ArrayViewSelector<Array<boolean>> {
+  public select<T>(source: ArrayView<T>): ArrayIndexListView<T> {
     return new ArrayCompressView<T>(source.loc, this.value);
   }
 
@@ -38,9 +38,17 @@ abstract class ArrayView<T> {
 
   public abstract toArray(): Array<T>;
 
+  public filter(predicate: (value: T) => boolean): ArrayView<T> {
+    throw new Error("Method not implemented."); // TODO
+  }
+
+  public is(predicate: (value: T) => boolean): CompressSelector {
+    throw new Error("Method not implemented."); // TODO
+  }
+
   abstract [Symbol.iterator](): IterableIterator<T>;
 
-  public subview<U>(selector: ArrayViewSelector<unknown, T>): ArrayView<T> {
+  public subview(selector: ArrayViewSelector<any>): ArrayView<T> {
     return selector.select(this);
   }
 }
