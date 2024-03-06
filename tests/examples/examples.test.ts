@@ -4,9 +4,11 @@ import {
   ArrayIndexListView,
   ArrayCompressView,
   ArraySliceView,
+} from "../../src/views";
+import {
   IndexListSelector,
   CompressSelector,
-} from "../../src/array-view";
+} from "../../src/selectors";
 
 it("First example", () => {
   const input = [1, 2, 3, 4, 5];
