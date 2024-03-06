@@ -27,5 +27,9 @@ it("Second example", () => {
   const view2 = view1.subview(new ArrayCompressSelector([true, false, true, false, true, false, true, false, true, false]));
   const view3 = view2.subview(new ArrayIndexListSelector(new ArrayFullView([0, 1, 3, 4])));
 
+  for (let i = 0; i < view3.length; i++) {
+    view3.loc[i] = 22;
+  }
+
   expect(true).toBe(true);
 });

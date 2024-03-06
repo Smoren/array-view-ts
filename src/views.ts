@@ -10,6 +10,8 @@ export abstract class ArrayView<T> {
 
   public abstract toArray(): Array<T>;
 
+  abstract [Symbol.iterator](): IterableIterator<T>;
+
   public filter(predicate: (value: T) => boolean): ArrayView<T> {
     return this.is(predicate).select(this);
   }
@@ -17,8 +19,6 @@ export abstract class ArrayView<T> {
   public is(predicate: (value: T) => boolean): ArrayCompressSelector {
     return new ArrayCompressSelector(this.toArray().map(predicate));
   }
-
-  abstract [Symbol.iterator](): IterableIterator<T>;
 
   public subview(selector: ArraySelector<any>): ArrayView<T> {
     return selector.select(this);
