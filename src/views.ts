@@ -1,4 +1,4 @@
-import { ArrayViewSelector, CompressSelector } from "./selectors";
+import { ArraySelector, ArrayCompressSelector } from "./selectors";
 
 export abstract class ArrayView<T> {
   public readonly loc: Array<T>;
@@ -14,13 +14,13 @@ export abstract class ArrayView<T> {
     throw new Error("Method not implemented."); // TODO
   }
 
-  public is(predicate: (value: T) => boolean): CompressSelector {
+  public is(predicate: (value: T) => boolean): ArrayCompressSelector {
     throw new Error("Method not implemented."); // TODO
   }
 
   abstract [Symbol.iterator](): IterableIterator<T>;
 
-  public subview(selector: ArrayViewSelector<any>): ArrayView<T> {
+  public subview(selector: ArraySelector<any>): ArrayView<T> {
     return selector.select(this);
   }
 }

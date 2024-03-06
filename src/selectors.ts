@@ -1,6 +1,6 @@
 import { ArrayCompressView, ArrayIndexListView, ArrayView } from "./views";
 
-export abstract class ArrayViewSelector<T> {
+export abstract class ArraySelector<T> {
   public readonly value: T;
 
   public abstract select<U>(source: ArrayView<U>): ArrayView<U>;
@@ -10,7 +10,7 @@ export abstract class ArrayViewSelector<T> {
   }
 }
 
-export class IndexListSelector extends ArrayViewSelector<Array<number>> {
+export class ArrayIndexListSelector extends ArraySelector<Array<number>> {
   public select<T>(source: ArrayView<T>): ArrayIndexListView<T> {
     return new ArrayIndexListView<T>(source.loc, this.value);
   }
@@ -20,7 +20,7 @@ export class IndexListSelector extends ArrayViewSelector<Array<number>> {
   }
 }
 
-export class CompressSelector extends ArrayViewSelector<Array<boolean>> {
+export class ArrayCompressSelector extends ArraySelector<Array<boolean>> {
   public select<T>(source: ArrayView<T>): ArrayIndexListView<T> {
     return new ArrayCompressView<T>(source.loc, this.value);
   }
