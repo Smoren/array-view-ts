@@ -20,6 +20,10 @@ export abstract class ArrayView<T> {
     return new ArrayCompressSelector(this.toArray().map(predicate));
   }
 
+  public set(value: Array<T>): void {
+    throw new Error("Method not implemented.");
+  }
+
   public subview(selector: ArraySelector<any>): ArrayView<T> {
     return selector.select(this);
   }
