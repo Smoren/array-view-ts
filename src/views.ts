@@ -27,6 +27,7 @@ export class ArrayView<T> implements IArrayView<T> {
         return target[this.convertIndex(Number(prop))];
       },
       set: (target, prop, value) => {
+        // TODO view.loc[slice] = data
         if (!Number.isInteger(Number(prop))) {
           throw new KeyError(`Invalid key`);
         }
