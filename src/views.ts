@@ -17,7 +17,7 @@ export class ArrayView<T> implements IArrayView<T> {
         }
 
         if (typeof prop === 'string' && Slice.isSlice(prop)) {
-          return this.subview(new ArraySliceSelector(prop))
+          return this.subview(new ArraySliceSelector(prop)).toArray();
         }
 
         if (!Number.isInteger(Number(prop))) {
@@ -35,6 +35,7 @@ export class ArrayView<T> implements IArrayView<T> {
         return true;
       },
     }) as SliceableArray<T>;
+
     this.source = source;
     this.parentView = parentView;
   }
