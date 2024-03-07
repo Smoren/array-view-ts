@@ -10,6 +10,7 @@ export class ArrayView<T> implements IArrayView<T> {
   protected readonly parentView?: ArrayView<T>;
 
   constructor(source: Array<T>, parentView?: ArrayView<T>) {
+    // TODO readonly
     this.loc = new Proxy<Array<T>>(source, {
       get: (target, prop) => {
         if (prop === 'length') {
