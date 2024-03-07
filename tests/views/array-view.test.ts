@@ -70,6 +70,50 @@ describe.each([
   },
 );
 
+describe.each([
+  ...dataProviderForWriteSuccess(),
+] as Array<[Array<number>, Array<number>]>)(
+  "Array View Set Success Test",
+  (
+    source: Array<number>,
+    toWrite: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const view = new ArrayView<number>(source);
+
+      // When
+      view.set(toWrite);
+
+      // And then
+      expect(view.toArray()).toEqual(toWrite);
+      expect(source).toEqual(toWrite);
+    });
+  },
+);
+
+describe.each([
+  ...dataProviderForWriteSuccess(),
+] as Array<[Array<number>, Array<number>]>)(
+  "Array View Set Loc Success Test",
+  (
+    source: Array<number>,
+    toWrite: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const view = new ArrayView<number>(source);
+
+      // When
+      view.loc[':'] = toWrite;
+
+      // And then
+      expect(view.toArray()).toEqual(toWrite);
+      expect(source).toEqual(toWrite);
+    });
+  },
+);
+
 function dataProviderForWriteSuccess(): Array<unknown> {
   return [
     [[1], [0]],
