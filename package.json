@@ -38,7 +38,11 @@
   ],
   "keywords": [
     "collection",
-    "view"
+    "view",
+    "slice",
+    "array",
+    "array-view",
+    "selector"
   ],
   "devDependencies": {
     "@borderless/ts-scripts": "^0.13.6",
