@@ -52,7 +52,7 @@ describe.each([
         fail();
       } catch (e) {
         expect(e).toBeInstanceOf(IndexError);
-        expect((e as IndexError).message).toEqual(`Index ${index} is out of range`);
+        expect((e as IndexError).message).toEqual(`Index ${index} is out of range.`);
       }
     });
   }

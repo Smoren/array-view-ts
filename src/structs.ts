@@ -8,7 +8,7 @@ export class Slice {
 
   public static fromString(s: string): Slice {
     if (!this.isSliceString(s)) {
-      throw new ValueError(`Invalid slice: ${s}`);
+      throw new ValueError(`Invalid slice: "${s}".`);
     }
 
     const slice = this.parseSliceString(s);
@@ -44,7 +44,7 @@ export class Slice {
     let step = this.step ?? 1;
 
     if (step === 0) {
-      throw new IndexError("Step cannot be 0");
+      throw new IndexError("Step cannot be 0.");
     }
 
     let defaultEnd = (step < 0 && this.end === undefined) ? -1 : undefined;
