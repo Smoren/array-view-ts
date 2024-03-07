@@ -133,7 +133,8 @@ export class ArrayCompressView<T> extends ArrayIndexListView<T> {
   public readonly mask: boolean[];
 
   constructor(source: Array<T>, mask: boolean[], parentView?: ArrayView<T>) {
-    if (source.length !== mask.length) {
+    const length = parentView?.length ?? source.length;
+    if (length !== mask.length) {
       throw new LengthError("Invalid mask length");
     }
 
