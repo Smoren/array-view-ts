@@ -1,4 +1,4 @@
-import { ArraySelector, ArrayCompressSelector } from "./selectors";
+import { ArraySelector, ArrayCompressSelector, ArraySliceSelector } from "./selectors";
 import { normalizeIndex } from "./utils";
 import { KeyError, LengthError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
@@ -13,6 +13,10 @@ export class ArrayView<T> {
       get: (target, prop) => {
         if (prop === 'length') {
           return target.length;
+        }
+
+        if (typeof prop === 'string' && Slice.isSlice(prop)) {
+          return this.subview(new ArraySliceSelector(prop))
         }
 
         if (!Number.isInteger(Number(prop))) {

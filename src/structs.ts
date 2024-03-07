@@ -1,4 +1,4 @@
-import { IndexError } from "./excpetions";
+import { IndexError, KeyError, ValueError } from "./excpetions";
 import { normalizeIndex } from "./utils";
 
 export class Slice {
@@ -7,13 +7,27 @@ export class Slice {
   public readonly step: number | undefined;
 
   public static fromString(s: string): Slice {
-    const slice = s.split(':')
-      .map(x => x.trim())
-      .map(x => (x === '') ? undefined : parseInt(x));
+    if (!this.isSlice(s)) {
+      throw new ValueError(`Invalid slice: ${s}`);
+    }
 
-    // TODO check length and values
+    const slice = this.parseSliceString(s);
 
     return new Slice(...slice);
+  }
+
+  public static isSlice(s: any): boolean {
+    if (typeof s !== 'string') {
+      return false;
+    }
+
+    if (!Number.isNaN(Number(s))) {
+      return false;
+    }
+
+    const slice = this.parseSliceString(s);
+
+    return !(slice.length < 1 || slice.length > 3);
   }
 
   constructor(start?: number, end?: number, step?: number) {
@@ -60,6 +74,12 @@ export class Slice {
 
   public toString(): string {
     return `${this.start ?? ''}:${this.end ?? ''}:${this.step ?? ''}`;
+  }
+
+  private static parseSliceString(s: string): (number | undefined)[] {
+    return s.split(':')
+      .map(x => x.trim())
+      .map(x => (x === '') ? undefined : parseInt(x));
   }
 
   private squeezeInBounds(x: number, min: number, max: number): number {
