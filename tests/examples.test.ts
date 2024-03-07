@@ -4,12 +4,12 @@ import {
   ArrayIndexListView,
   ArrayCompressView,
   ArraySliceView,
-} from "../../src/views";
+} from "../src/views";
 import {
   ArrayIndexListSelector,
   ArrayCompressSelector, ArraySliceSelector,
-} from "../../src/selectors";
-import { Slice } from "../../src/structs";
+} from "../src/selectors";
+import { Slice } from "../src/structs";
 
 it("First example", () => {
   const input = [1, 2, 3, 4, 5];
