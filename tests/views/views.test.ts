@@ -585,11 +585,11 @@ function dataProviderForSliceSubviewReadSuccess(): Array<unknown> {
 describe.each([
   ...dataProviderForSliceSubviewWriteSuccess(),
 ] as Array<[Array<number>, string, Array<number>, Array<number>]>)(
-  "Array View Slice Subview Loc Update Success Test",
+  "Array View Slice Subview Loc Write Success Test",
   (
     source: Array<number>,
     config: string,
-    toAdd: Array<number>,
+    toWrite: Array<number>,
     expected: Array<number>,
   ) => {
     it("", () => {
@@ -597,7 +597,7 @@ describe.each([
       const view = new ArrayView<number>(source);
 
       // When
-      view.loc[config] = toAdd;
+      view.loc[config] = toWrite;
 
       // And then
       expect(view.toArray()).toEqual(expected);
@@ -624,5 +624,235 @@ function dataProviderForSliceSubviewWriteSuccess(): Array<unknown> {
     [[1, 2, 3, 4, 5, 6, 7, 8], ':-2:2', [77, 88, 99], [77, 2, 88, 4, 99, 6, 7, 8]],
     [[1, 2, 3, 4, 5, 6, 7, 8], ':6:2', [77, 88, 99], [77, 2, 88, 4, 99, 6, 7, 8]],
     [[1, 2, 3, 4, 5, 6, 7, 8], '1:-1:2', [77, 88, 99], [1, 77, 3, 88, 5, 99, 7, 8]],
+  ];
+}
+
+describe.each([
+  ...dataProviderForCombineReadSuccess(),
+] as Array<[Array<number>, (source: Array<number>) => ArrayView<number>, Array<number>]>)(
+  "Array View Combine Read Success Test",
+  (
+    source: Array<number>,
+    viewGetter: (source: Array<number>) => ArrayView<number>,
+    expected: Array<number>,
+  ) => {
+    it("", () => {
+      // When
+      const view = viewGetter(source);
+
+      // Then
+      expect(view.toArray()).toEqual(expected);
+    });
+  },
+);
+
+function dataProviderForCombineReadSuccess(): Array<unknown> {
+  return [
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2'),
+      [1, 3, 5, 7, 9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview(new ArrayCompressSelector([true, false, true, false, true])),
+      [1, 5, 9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview(new ArrayCompressSelector([true, false, true, false, true]))
+        .subview(new ArrayIndexListSelector([0, 2])),
+      [1, 9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview(new ArrayCompressSelector([true, false, true, false, true]))
+        .subview(new ArrayIndexListSelector([0, 2]))
+        .subview('1:'),
+      [9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview(new ArrayCompressSelector([true, false, true, false, true, false, true, false, true, false]))
+        .subview(new ArrayCompressSelector([true, false, true, false, true]))
+        .subview(new ArrayCompressSelector([true, false, true]))
+        .subview(new ArrayCompressSelector([false, true])),
+      [9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview(new ArrayCompressSelector([true, false, true, false, true, false, true, false, true, false]))
+        .subview(new ArrayCompressSelector([true, false, true, false, true]))
+        .subview(new ArrayCompressSelector([true, false, true])),
+      [1, 9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview(new ArrayIndexListSelector([0, 2, 4, 6, 8]))
+        .subview(new ArrayIndexListSelector([0, 2, 4]))
+        .subview(new ArrayIndexListSelector([0, 2]))
+        .subview(new ArrayIndexListSelector([1])),
+      [9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview('::2')
+        .subview('::2'),
+      [1, 9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview('::2')
+        .subview('::2')
+        .subview('1:'),
+      [9],
+    ],
+  ];
+}
+
+describe.each([
+  ...dataProviderForCombineWriteSuccess(),
+] as Array<[Array<number>, (source: Array<number>) => ArrayView<number>, Array<number>, Array<number>]>)(
+  "Array View Combine Write Success Test",
+  (
+    source: Array<number>,
+    viewGetter: (source: Array<number>) => ArrayView<number>,
+    toWrite: Array<number>,
+    expected: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const view = viewGetter(source);
+
+      // When
+      view.set(toWrite)
+
+      // Then
+      expect(source).toEqual(expected);
+    });
+  },
+);
+
+describe.each([
+  ...dataProviderForCombineWriteSuccess(),
+] as Array<[Array<number>, (source: Array<number>) => ArrayView<number>, Array<number>, Array<number>]>)(
+  "Array View Combine Write Slice Success Test",
+  (
+    source: Array<number>,
+    viewGetter: (source: Array<number>) => ArrayView<number>,
+    toWrite: Array<number>,
+    expected: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const view = viewGetter(source);
+
+      // When
+      view.loc[':'] = toWrite;
+
+      // Then
+      expect(source).toEqual(expected);
+    });
+  },
+);
+
+function dataProviderForCombineWriteSuccess(): Array<unknown> {
+  return [
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2'),
+      [11, 33, 55, 77, 99],
+      [11, 2, 33, 4, 55, 6, 77, 8, 99, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview(new ArrayCompressSelector([true, false, true, false, true])),
+      [11, 55, 99],
+      [11, 2, 3, 4, 55, 6, 7, 8, 99, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview(new ArrayCompressSelector([true, false, true, false, true]))
+        .subview(new ArrayIndexListSelector([0, 2])),
+      [11, 99],
+      [11, 2, 3, 4, 5, 6, 7, 8, 99, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview(new ArrayCompressSelector([true, false, true, false, true]))
+        .subview(new ArrayIndexListSelector([0, 2]))
+        .subview('1:'),
+      [99],
+      [1, 2, 3, 4, 5, 6, 7, 8, 99, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview(new ArrayCompressSelector([true, false, true, false, true, false, true, false, true, false]))
+        .subview(new ArrayCompressSelector([true, false, true, false, true]))
+        .subview(new ArrayCompressSelector([true, false, true]))
+        .subview(new ArrayCompressSelector([false, true])),
+      [99],
+      [1, 2, 3, 4, 5, 6, 7, 8, 99, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview(new ArrayCompressSelector([true, false, true, false, true, false, true, false, true, false]))
+        .subview(new ArrayCompressSelector([true, false, true, false, true]))
+        .subview(new ArrayCompressSelector([true, false, true])),
+      [11, 99],
+      [11, 2, 3, 4, 5, 6, 7, 8, 99, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview(new ArrayIndexListSelector([0, 2, 4, 6, 8]))
+        .subview(new ArrayIndexListSelector([0, 2, 4]))
+        .subview(new ArrayIndexListSelector([0, 2]))
+        .subview(new ArrayIndexListSelector([1])),
+      [99],
+      [1, 2, 3, 4, 5, 6, 7, 8, 99, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview('::2')
+        .subview('::2'),
+      [11, 99],
+      [11, 2, 3, 4, 5, 6, 7, 8, 99, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView<number>(source)
+        .subview('::2')
+        .subview('::2')
+        .subview('::2')
+        .subview('1:'),
+      [99],
+      [1, 2, 3, 4, 5, 6, 7, 8, 99, 10],
+    ],
   ];
 }
