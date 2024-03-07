@@ -2,10 +2,10 @@ import { ArraySelector, ArrayCompressSelector, ArraySliceSelector } from "./sele
 import { normalizeIndex } from "./utils";
 import { KeyError, LengthError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
-import type { ArrayView as IArrayView, SliceArray } from './types';
+import type { ArrayView as IArrayView, SliceableArray } from './types';
 
 export class ArrayView<T> implements IArrayView<T> {
-  public readonly loc: SliceArray<T>;
+  public readonly loc: SliceableArray<T>;
   protected readonly source: Array<T>;
   protected readonly parentView?: ArrayView<T>;
 
@@ -34,7 +34,7 @@ export class ArrayView<T> implements IArrayView<T> {
         target[this.convertIndex(Number(prop))] = value;
         return true;
       },
-    }) as SliceArray<T>;
+    }) as SliceableArray<T>;
     this.source = source;
     this.parentView = parentView;
   }
