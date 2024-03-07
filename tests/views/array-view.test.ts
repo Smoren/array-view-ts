@@ -581,3 +581,48 @@ function dataProviderForSliceSubviewReadSuccess(): Array<unknown> {
     [[1, 2, 3, 4, 5, 6, 7, 8, 9], '::2', [1, 3, 5, 7, 9]],
   ];
 }
+
+describe.each([
+  ...dataProviderForSliceSubviewWriteSuccess(),
+] as Array<[Array<number>, string, Array<number>, Array<number>]>)(
+  "Array View Slice Subview Loc Update Success Test",
+  (
+    source: Array<number>,
+    config: string,
+    toAdd: Array<number>,
+    expected: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const view = new ArrayView<number>(source);
+
+      // When
+      view.loc[config] = toAdd;
+
+      // And then
+      expect(view.toArray()).toEqual(expected);
+      expect(source).toEqual(expected);
+    });
+  },
+);
+
+function dataProviderForSliceSubviewWriteSuccess(): Array<unknown> {
+  return [
+    [[], ':', [], []],
+    [[1], ':', [11], [11]],
+    [[1, 2, 3], ':', [2, 4, 6], [2, 4, 6]],
+    [[1, 2, 3], '0:', [2, 4, 6], [2, 4, 6]],
+    [[1, 2, 3], ':3', [2, 4, 6], [2, 4, 6]],
+    [[1, 2, 3], '0:3', [2, 4, 6], [2, 4, 6]],
+    [[1, 2, 3], '1:', [22, 33], [1, 22, 33]],
+    [[1, 2, 3], ':2', [11, 22], [11, 22, 3]],
+    [[1, 2, 3], ':-1', [11, 22], [11, 22, 3]],
+    [[1, 2, 3, 4, 5, 6], '::2', [77, 88, 99], [77, 2, 88, 4, 99, 6]],
+    [[1, 2, 3, 4, 5, 6], '::-2', [77, 88, 99], [1, 99, 3, 88, 5, 77]],
+    [[1, 2, 3, 4, 5, 6], '1::2', [77, 88, 99], [1, 77, 3, 88, 5, 99]],
+    [[1, 2, 3, 4, 5, 6], '-2::-2', [77, 88, 99], [99, 2, 88, 4, 77, 6]],
+    [[1, 2, 3, 4, 5, 6, 7, 8], ':-2:2', [77, 88, 99], [77, 2, 88, 4, 99, 6, 7, 8]],
+    [[1, 2, 3, 4, 5, 6, 7, 8], ':6:2', [77, 88, 99], [77, 2, 88, 4, 99, 6, 7, 8]],
+    [[1, 2, 3, 4, 5, 6, 7, 8], '1:-1:2', [77, 88, 99], [1, 77, 3, 88, 5, 99, 7, 8]],
+  ];
+}
