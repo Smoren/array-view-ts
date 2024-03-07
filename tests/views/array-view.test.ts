@@ -465,13 +465,13 @@ describe.each([
     it("", () => {
       // Given
       const view = new ArrayView<number>(source);
-      const subview = view.loc[config];
+      const slicedArray = view.loc[config];
 
-      expect(subview.toArray()).toEqual(expected);
-      expect(subview.length).toEqual(expected.length);
+      expect(slicedArray).toEqual(expected);
+      expect(slicedArray.length).toEqual(expected.length);
 
-      for (let i = 0; i < subview.length; i++) {
-        expect(subview.loc[i]).toBe(expected[i]);
+      for (let i = 0; i < slicedArray.length; i++) {
+        expect(slicedArray[i]).toBe(expected[i]);
       }
 
       for (let i = 0; i < view.length; i++) {
@@ -480,7 +480,7 @@ describe.each([
 
       // And then
       expect(view.toArray()).toEqual(source);
-      expect(subview.toArray()).toEqual(expected);
+      expect(slicedArray).toEqual(expected);
     });
   },
 );

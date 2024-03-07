@@ -20,5 +20,5 @@ export interface ArrayView<T> {
 }
 
 export type SliceableArray<T> = Array<T> & {
-  [index: string]: ArrayView<T>
+  [index: string]: Array<T>
 }
