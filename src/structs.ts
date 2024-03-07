@@ -43,7 +43,7 @@ export class Slice {
 
     if (step > 0 && start >= containerLength) {
       start = end = containerLength - 1
-    } else if (step < 0 && start <= 0) {
+    } else if (step < 0 && start < 0) {
       start = end = 0;
       defaultEnd = 0;
     }
