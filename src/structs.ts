@@ -1,4 +1,4 @@
-import { IndexError, KeyError, ValueError } from "./excpetions";
+import { IndexError, ValueError } from "./excpetions";
 import { normalizeIndex } from "./utils";
 
 export class Slice {

@@ -465,7 +465,6 @@ describe.each([
     it("", () => {
       // Given
       const view = new ArrayView<number>(source);
-      // @ts-ignore
       const subview = view.loc[config];
 
       expect(subview.toArray()).toEqual(expected);
