@@ -1,7 +1,7 @@
 import { ArrayCompressSelector, ArraySelector } from './selectors';
 
 export interface ArrayView<T> {
-  readonly loc: SliceArray<T>;
+  readonly loc: SliceableArray<T>;
   readonly length: number;
 
   toArray(): Array<T>;
@@ -19,6 +19,6 @@ export interface ArrayView<T> {
   [Symbol.iterator](): IterableIterator<T>;
 }
 
-export type SliceArray<T> = Array<T> & {
+export type SliceableArray<T> = Array<T> & {
   [index: string]: ArrayView<T>
 }
