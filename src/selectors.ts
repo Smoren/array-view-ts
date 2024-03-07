@@ -6,7 +6,7 @@ export abstract class ArraySelector<T> {
 
   public abstract select<U>(source: ArrayView<U>): ArrayView<U>;
 
-  constructor(value: T) {
+  protected constructor(value: T) {
     this.value = value;
   }
 }
