@@ -56,8 +56,10 @@ export class ArrayView<T> implements IArrayView<T> {
     return new ArrayCompressSelector(this.toArray().map(predicate));
   }
 
-  public subview(selector: ArraySelector<any>): ArrayView<T> {
-    return selector.select(this);
+  public subview(selector: ArraySelector<any> | string): ArrayView<T> {
+    return (selector instanceof ArraySelector)
+      ? selector.select(this)
+      : (new ArraySliceSelector(selector).select(this));
   }
 
   public apply(mapper: (item: T, index: number) => T): void {

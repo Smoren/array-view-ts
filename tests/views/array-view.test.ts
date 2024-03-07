@@ -431,7 +431,7 @@ describe.each([
     it("", () => {
       // Given
       const view = new ArrayView<number>(source);
-      const subview = view.subview(new ArraySliceSelector(config));
+      const subview = view.subview(config);
 
       expect(subview.toArray()).toEqual(expected);
       expect(subview.length).toEqual(expected.length);
