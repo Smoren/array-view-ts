@@ -22,7 +22,7 @@ export class ArrayView<T> implements IArrayView<T> {
         }
 
         if (!Number.isInteger(Number(prop))) {
-          throw new KeyError(`Invalid key`);
+          throw new KeyError(`Invalid key: "${String(prop)}".`);
         }
 
         return target[this.convertIndex(Number(prop))];
@@ -34,7 +34,7 @@ export class ArrayView<T> implements IArrayView<T> {
         }
 
         if (!Number.isInteger(Number(prop))) {
-          throw new KeyError(`Invalid key`);
+          throw new KeyError(`Invalid key: "${String(prop)}".`);
         }
 
         target[this.convertIndex(Number(prop))] = value;
@@ -76,7 +76,7 @@ export class ArrayView<T> implements IArrayView<T> {
 
   public set(newValues: Array<T> | ArrayView<T>): void {
     if (newValues.length !== this.length) {
-      throw new LengthError('New values array length not equal to view length.');
+      throw new LengthError(`Length of values array not equal to view length (${newValues.length} != ${this.length}).`);
     }
     const newValuesView = newValues instanceof ArrayView
       ? newValues
@@ -135,7 +135,7 @@ export class ArrayCompressView<T> extends ArrayIndexListView<T> {
   constructor(source: Array<T>, mask: boolean[], parentView?: ArrayView<T>) {
     const length = parentView?.length ?? source.length;
     if (length !== mask.length) {
-      throw new LengthError("Invalid mask length");
+      throw new LengthError(`Mask length not equal to source length (${mask.length} != ${length}).`);
     }
 
     const indexes = mask
