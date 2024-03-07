@@ -29,7 +29,7 @@ export class Slice {
       throw new IndexError("Step cannot be 0");
     }
 
-    const defaultEnd = (step < 0 && this.end === undefined) ? -1 : undefined;
+    let defaultEnd = (step < 0 && this.end === undefined) ? -1 : undefined;
 
     let start = this.start ?? (step > 0 ? 0 : containerLength - 1);
     let end = this.end ?? (step > 0 ? containerLength : -1);
@@ -41,14 +41,15 @@ export class Slice {
     start = normalizeIndex(start, containerLength, false);
     end = normalizeIndex(end, containerLength, false);
 
-    if (start >= containerLength && end > containerLength) {
+    if (step > 0 && start >= containerLength) {
       start = end = containerLength - 1
-    } else if (start <= 0 && end < 0) {
+    } else if (step < 0 && start <= 0) {
       start = end = 0;
+      defaultEnd = 0;
     }
 
     start = this.squeezeInBounds(start, 0, containerLength - 1);
-    end = this.squeezeInBounds(end, 0, containerLength);
+    end = this.squeezeInBounds(end, step > 0 ? 0 : -1, containerLength);
 
     if ((step > 0 && end < start) || (step < 0 && end > start)) {
       end = start;
