@@ -16,7 +16,11 @@ export class Slice {
     return new Slice(...slice);
   }
 
-  public static isSlice(s: any): boolean {
+  public static isSlice(s: unknown): boolean {
+    if (s instanceof Slice) {
+      return true;
+    }
+
     if (typeof s !== 'string') {
       return false;
     }
