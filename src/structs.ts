@@ -7,7 +7,7 @@ export class Slice {
   public readonly step: number | undefined;
 
   public static fromString(s: string): Slice {
-    if (!this.isSlice(s)) {
+    if (!this.isSliceString(s)) {
       throw new ValueError(`Invalid slice: ${s}`);
     }
 
@@ -17,10 +17,10 @@ export class Slice {
   }
 
   public static isSlice(s: unknown): boolean {
-    if (s instanceof Slice) {
-      return true;
-    }
+    return (s instanceof Slice) || this.isSliceString(s);
+  }
 
+  public static isSliceString(s: unknown): boolean {
     if (typeof s !== 'string') {
       return false;
     }

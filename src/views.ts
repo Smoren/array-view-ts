@@ -17,7 +17,7 @@ export class ArrayView<T> implements IArrayView<T> {
           return target.length;
         }
 
-        if (typeof prop === 'string' && Slice.isSlice(prop)) {
+        if (typeof prop === 'string' && Slice.isSliceString(prop)) {
           return this.subview(new ArraySliceSelector(prop)).toArray();
         }
 
@@ -28,7 +28,7 @@ export class ArrayView<T> implements IArrayView<T> {
         return target[this.convertIndex(Number(prop))];
       },
       set: (target, prop, value) => {
-        if (typeof prop === 'string' && Slice.isSlice(prop)) {
+        if (typeof prop === 'string' && Slice.isSliceString(prop)) {
           this.subview(new ArraySliceSelector(prop)).set(value);
           return true;
         }
