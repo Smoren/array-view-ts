@@ -86,5 +86,9 @@ export class NormalizedSlice extends Slice {
     return this.start + normalizeIndex(i, this.length, false) * this.step;
   }
 
-  // TODO generator
+  public *toRange(): IterableIterator<number> {
+    for (let i = 0; i < this.length; ++i) {
+      yield this.convertIndex(i);
+    }
+  }
 }

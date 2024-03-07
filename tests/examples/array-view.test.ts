@@ -1,6 +1,5 @@
 import { ArrayView } from "../../src/views";
 import { ArrayCompressSelector, ArrayIndexListSelector, ArraySliceSelector } from "../../src/selectors";
-import { Slice } from "../../src/structs";
 
 describe.each([
   ...dataProviderForReadSuccess(),
