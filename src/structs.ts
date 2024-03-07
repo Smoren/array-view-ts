@@ -41,6 +41,12 @@ export class Slice {
     start = normalizeIndex(start, containerLength, false);
     end = normalizeIndex(end, containerLength, false);
 
+    if (start >= containerLength && end > containerLength) {
+      start = end = containerLength - 1
+    } else if (start <= 0 && end < 0) {
+      start = end = 0;
+    }
+
     start = this.squeezeInBounds(start, 0, containerLength - 1);
     end = this.squeezeInBounds(end, 0, containerLength);
 
