@@ -1,6 +1,6 @@
 import { ArraySelector, ArrayCompressSelector } from "./selectors";
 import { normalizeIndex } from "./utils";
-import { KeyError } from './excpetions';
+import { KeyError, LengthError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
 
 export class ArrayView<T> {
@@ -50,12 +50,27 @@ export class ArrayView<T> {
     return new ArrayCompressSelector(this.toArray().map(predicate));
   }
 
-  public set(value: Array<T>): void {
-    throw new Error("Method not implemented.");
-  }
-
   public subview(selector: ArraySelector<any>): ArrayView<T> {
     return selector.select(this);
+  }
+
+  public apply(mapper: (item: T, index: number) => T): void {
+    for (let i = 0; i < this.length; ++i) {
+      this.loc[i] = mapper(this.loc[i], i);
+    }
+  }
+
+  public set(newValues: Array<T> | ArrayView<T>): void {
+    if (newValues.length !== this.length) {
+      throw new LengthError('New values array length not equal to view length.');
+    }
+    const newValuesView = newValues instanceof ArrayView
+      ? newValues
+      : new ArrayView<T>(newValues);
+
+    for (let i = 0; i < this.length; ++i) {
+      this.loc[i] = newValuesView.loc[i];
+    }
   }
 
   *[Symbol.iterator](): IterableIterator<T> {
@@ -107,7 +122,7 @@ export class ArrayCompressView<T> extends ArrayIndexListView<T> {
 
   constructor(source: Array<T>, mask: boolean[], parentView?: ArrayView<T>) {
     if (source.length !== mask.length) {
-      throw new Error("Invalid mask length");
+      throw new LengthError("Invalid mask length");
     }
 
     const indexes = mask
@@ -125,7 +140,6 @@ export class ArraySliceView<T> extends ArrayView<T> {
   constructor(source: Array<T>, slice: Slice, parentView?: ArrayView<T>) {
     super(source, parentView);
     this.slice = slice.normalize(this.parentLength);
-    const a = 1;
   }
 
   get length(): number {
