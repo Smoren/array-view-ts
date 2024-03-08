@@ -857,3 +857,158 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
     ],
   ];
 }
+
+describe.each([
+  ...dataProviderForApplySuccess(),
+] as Array<[
+  Array<number>,
+  (source: Array<number>) => ArrayView<number>,
+  (item: number, index: number) => number,
+  Array<number>,
+]>)(
+  "Array View Apply Success Test",
+  (
+    source: Array<number>,
+    viewGetter: (source: Array<number>) => ArrayView<number>,
+    mapper: (item: number, index: number) => number,
+    expected: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const view = viewGetter(source);
+
+      // When
+      view.apply(mapper)
+
+      // Then
+      expect(source).toEqual(expected);
+    });
+  },
+);
+
+function dataProviderForApplySuccess(): Array<unknown> {
+  return [
+    [
+      [],
+      (source: Array<number>) => new ArrayView(source),
+      (item: number) => item + 1,
+      [],
+    ],
+    [
+      [1],
+      (source: Array<number>) => new ArrayView(source),
+      (item: number) => item + 1,
+      [2],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView(source),
+      (item: number) => item,
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView(source),
+      (item: number) => item + 1,
+      [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView(source),
+      (item: number, index: number) => item + index,
+      [1, 3, 5, 7, 9, 11, 13, 15, 17, 19],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView(source)
+        .subview('::2'),
+      (item: number, index: number) => item + index,
+      [1, 2, 4, 4, 7, 6, 10, 8, 13, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView(source)
+        .subview('1::2'),
+      (item: number) => item * 2,
+      [1, 4, 3, 8, 5, 12, 7, 16, 9, 20],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView(source)
+        .subview('1::2')
+        .subview(new ArrayIndexListSelector([0, 1, 2])),
+      (item: number) => item * 2,
+      [1, 4, 3, 8, 5, 12, 7, 8, 9, 10],
+    ],
+  ];
+}
+
+describe.each([
+  ...dataProviderForApplyWithSuccess(),
+] as Array<[
+  Array<number>,
+  (source: Array<number>) => ArrayView<number>,
+  (item: number, index: number) => number,
+  Array<number>,
+  Array<number>,
+]>)(
+  "Array View Apply With Success Test",
+  (
+    source: Array<number>,
+    viewGetter: (source: Array<number>) => ArrayView<number>,
+    mapper: (item: number, index: number) => number,
+    arg: Array<number>,
+    expected: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const view = viewGetter(source);
+
+      // When
+      view.applyWith(arg, mapper)
+
+      // Then
+      expect(source).toEqual(expected);
+    });
+  },
+);
+
+function dataProviderForApplyWithSuccess(): Array<unknown> {
+  return [
+    [
+      [],
+      (source: Array<number>) => new ArrayView(source),
+      (lhs: number, rhs: number) => lhs + rhs,
+      [],
+      [],
+    ],
+    [
+      [1],
+      (source: Array<number>) => new ArrayView(source),
+      (lhs: number, rhs: number) => lhs + rhs,
+      [2],
+      [3],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView(source),
+      (lhs: number, rhs: number) => lhs + rhs,
+      [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+      [11, 22, 33, 44, 55, 66, 77, 88, 99, 110],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView(source),
+      (lhs: number, rhs: number, index: number) => index % 2 === 0 ? lhs : rhs,
+      [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+      [1, 20, 3, 40, 5, 60, 7, 80, 9, 100],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayView(source).subview('::2'),
+      (lhs: number, rhs: number) => lhs * rhs,
+      [1, 2, 3, 4, 5],
+      [1, 2, 6, 4, 15, 6, 28, 8, 45, 10],
+    ],
+  ];
+}
