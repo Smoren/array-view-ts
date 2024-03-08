@@ -7,9 +7,9 @@ export interface ArrayViewInterface<T> {
 
   filter(predicate: (value: T) => boolean): ArrayViewInterface<T>;
 
-  is(predicate: (value: T) => boolean): SelectorInterface;
+  is(predicate: (value: T) => boolean): ArraySelectorInterface;
 
-  subview(selector: SelectorInterface | string): ArrayViewInterface<T>;
+  subview(selector: ArraySelectorInterface | string): ArrayViewInterface<T>;
 
   apply(mapper: (item: T, index: number) => T): void;
 
@@ -20,7 +20,7 @@ export interface ArrayViewInterface<T> {
   [Symbol.iterator](): IterableIterator<T>;
 }
 
-export interface SelectorInterface {
+export interface ArraySelectorInterface {
   select<T>(source: ArrayViewInterface<T>): ArrayViewInterface<T>;
 }
 
