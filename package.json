@@ -1,20 +1,20 @@
 {
-  "name": "collections-view",
+  "name": "array-view",
   "version": "0.1.0",
   "description": "TODO",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Smoren/collections-view-ts.git"
+    "url": "git+https://github.com/Smoren/array-view-ts.git"
   },
   "author": {
     "name": "Smoren",
     "email": "ofigate@gmail.com",
     "url": "https://github.com/Smoren"
   },
-  "homepage": "https://github.com/Smoren/collections-view-ts#readme",
+  "homepage": "https://github.com/Smoren/array-view-ts#readme",
   "bugs": {
-    "url": "https://github.com/Smoren/collections-view-ts/issues"
+    "url": "https://github.com/Smoren/array-view-ts/issues"
   },
   "main": "./lib/index.js",
   "module": "./es/index.js",
