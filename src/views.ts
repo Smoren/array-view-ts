@@ -88,13 +88,14 @@ export class ArrayView<T> implements IArrayView<T> {
       : (new ArraySliceSelector(selector).select(this));
   }
 
-  public apply(mapper: (item: T, index: number) => T): void {
+  public apply(mapper: (item: T, index: number) => T): ArrayView<T> {
     for (let i = 0; i < this.length; ++i) {
       this.loc[i] = mapper(this.loc[i], i);
     }
+    return this;
   }
 
-  public applyWith<U>(data: Array<U> | ArrayView<U>, mapper: (lhs: T, rhs: U, index: number) => T): void {
+  public applyWith<U>(data: Array<U> | ArrayView<U>, mapper: (lhs: T, rhs: U, index: number) => T): ArrayView<T> {
     if (data.length !== this.length) {
       throw new LengthError(`Length of values array not equal to view length (${data.length} != ${this.length}).`);
     }
@@ -104,6 +105,8 @@ export class ArrayView<T> implements IArrayView<T> {
     for (let i = 0; i < this.length; ++i) {
       this.loc[i] = mapper(this.loc[i], dataView.loc[i], i);
     }
+
+    return this;
   }
 
   public set(newValues: Array<T> | ArrayView<T>): void {
