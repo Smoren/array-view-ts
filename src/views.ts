@@ -9,6 +9,12 @@ export class ArrayView<T> implements IArrayView<T> {
   protected readonly source: Array<T>;
   protected readonly parentView?: ArrayView<T>;
 
+  public static toView<T>(source: Array<T> | ArrayView<T>): ArrayView<T> {
+    return source instanceof ArrayView
+      ? source
+      : new ArrayView(source);
+  }
+
   constructor(source: Array<T>, parentView?: ArrayView<T>) {
     // TODO readonly
     this.loc = new Proxy<Array<T>>(source, {
@@ -74,13 +80,23 @@ export class ArrayView<T> implements IArrayView<T> {
     }
   }
 
+  public applyWith<U>(data: Array<U> | ArrayView<U>, mapper: (lhs: T, rhs: U, index: number) => T): void {
+    if (data.length !== this.length) {
+      throw new LengthError(`Length of values array not equal to view length (${data.length} != ${this.length}).`);
+    }
+
+    const dataView = ArrayView.toView(data);
+
+    for (let i = 0; i < this.length; ++i) {
+      this.loc[i] = mapper(this.loc[i], dataView.loc[i], i);
+    }
+  }
+
   public set(newValues: Array<T> | ArrayView<T>): void {
     if (newValues.length !== this.length) {
       throw new LengthError(`Length of values array not equal to view length (${newValues.length} != ${this.length}).`);
     }
-    const newValuesView = newValues instanceof ArrayView
-      ? newValues
-      : new ArrayView<T>(newValues);
+    const newValuesView = ArrayView.toView(newValues);
 
     for (let i = 0; i < this.length; ++i) {
       this.loc[i] = newValuesView.loc[i];

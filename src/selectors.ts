@@ -33,7 +33,7 @@ export class ArrayCompressSelector extends ArraySelector<Array<boolean>> {
 
 export class ArraySliceSelector extends ArraySelector<Slice> {
   constructor(slice: Slice | string) {
-    super(slice instanceof Slice ? slice : Slice.fromString(slice));
+    super(slice instanceof Slice ? slice : Slice.toSlice(slice));
   }
 
   public select<T>(source: ArrayView<T>): ArraySliceView<T> {
