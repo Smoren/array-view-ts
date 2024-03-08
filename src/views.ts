@@ -2,7 +2,7 @@ import { ArraySelector, ArrayCompressSelector, ArraySliceSelector } from "./sele
 import { normalizeIndex } from "./utils";
 import { KeyError, LengthError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
-import type { ArrayView as IArrayView, SliceableArray } from './types';
+import type { ArrayView as IArrayView, SliceableArray } from "./types";
 
 export class ArrayView<T> implements IArrayView<T> {
   public readonly loc: SliceableArray<T>;
@@ -15,15 +15,22 @@ export class ArrayView<T> implements IArrayView<T> {
       : new ArrayView(source);
   }
 
-  constructor(source: Array<T>, parentView?: ArrayView<T>) {
+  constructor(
+    source: Array<T>,
+    {
+      parentView = undefined,
+    }: {
+      parentView?: ArrayView<T>,
+    } = {},
+  ) {
     // TODO readonly
     this.loc = new Proxy<Array<T>>(source, {
       get: (target, prop) => {
-        if (prop === 'length') {
+        if (prop === "length") {
           return target.length;
         }
 
-        if (typeof prop === 'string' && Slice.isSliceString(prop)) {
+        if (typeof prop === "string" && Slice.isSliceString(prop)) {
           return this.subview(new ArraySliceSelector(prop)).toArray();
         }
 
@@ -34,7 +41,7 @@ export class ArrayView<T> implements IArrayView<T> {
         return target[this.convertIndex(Number(prop))];
       },
       set: (target, prop, value) => {
-        if (typeof prop === 'string' && Slice.isSliceString(prop)) {
+        if (typeof prop === "string" && Slice.isSliceString(prop)) {
           this.subview(new ArraySliceSelector(prop)).set(value);
           return true;
         }
@@ -103,7 +110,7 @@ export class ArrayView<T> implements IArrayView<T> {
     }
   }
 
-  *[Symbol.iterator](): IterableIterator<T> {
+  * [Symbol.iterator](): IterableIterator<T> {
     for (let i = 0; i < this.length; i++) {
       yield this.loc[i];
     }
@@ -121,8 +128,17 @@ export class ArrayView<T> implements IArrayView<T> {
 export class ArrayIndexListView<T> extends ArrayView<T> {
   public readonly indexes: number[];
 
-  constructor(source: Array<T>, indexes: number[], parentView?: ArrayView<T>) {
-    super(source, parentView);
+  constructor(
+    source: Array<T>,
+    {
+      indexes,
+      parentView = undefined,
+    }: {
+      indexes: number[],
+      parentView?: ArrayView<T>,
+    },
+  ) {
+    super(source, { parentView });
     this.indexes = indexes;
   }
 
@@ -134,7 +150,7 @@ export class ArrayIndexListView<T> extends ArrayView<T> {
     return this.indexes.length;
   }
 
-  *[Symbol.iterator](): IterableIterator<T> {
+  * [Symbol.iterator](): IterableIterator<T> {
     for (let i = 0; i < this.length; i++) {
       yield this.loc[i];
     }
@@ -148,7 +164,16 @@ export class ArrayIndexListView<T> extends ArrayView<T> {
 export class ArrayCompressView<T> extends ArrayIndexListView<T> {
   public readonly mask: boolean[];
 
-  constructor(source: Array<T>, mask: boolean[], parentView?: ArrayView<T>) {
+  constructor(
+    source: Array<T>,
+    {
+      mask,
+      parentView = undefined,
+    }: {
+      mask: boolean[],
+      parentView?: ArrayView<T>,
+    },
+  ) {
     const length = parentView?.length ?? source.length;
     if (length !== mask.length) {
       throw new LengthError(`Mask length not equal to source length (${mask.length} != ${length}).`);
@@ -158,7 +183,7 @@ export class ArrayCompressView<T> extends ArrayIndexListView<T> {
       .map((v, i) => v ? i : null)
       .filter(v => v !== null) as number[];
 
-    super(source, indexes, parentView);
+    super(source, { indexes, parentView });
     this.mask = mask;
   }
 }
@@ -166,8 +191,17 @@ export class ArrayCompressView<T> extends ArrayIndexListView<T> {
 export class ArraySliceView<T> extends ArrayView<T> {
   public readonly slice: NormalizedSlice;
 
-  constructor(source: Array<T>, slice: Slice, parentView?: ArrayView<T>) {
-    super(source, parentView);
+  constructor(
+    source: Array<T>,
+    {
+      slice,
+      parentView = undefined,
+    }: {
+      slice: Slice,
+      parentView?: ArrayView<T>,
+    },
+  ) {
+    super(source, { parentView });
     this.slice = slice.normalize(this.parentLength);
   }
 
@@ -175,7 +209,7 @@ export class ArraySliceView<T> extends ArrayView<T> {
     return this.slice.length;
   }
 
-  *[Symbol.iterator](): IterableIterator<T> {
+  * [Symbol.iterator](): IterableIterator<T> {
     for (let i = 0; i < this.length; i++) {
       yield this.loc[i];
     }

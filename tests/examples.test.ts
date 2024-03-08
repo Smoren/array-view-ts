@@ -12,16 +12,6 @@ import {
 import { Slice } from "../src/structs";
 
 it("First example", () => {
-  const input = [1, 2, 3, 4, 5];
-
-  const view1 = new ArrayIndexListView(input, [0, 2, 4]);
-  const view2 = new ArrayCompressView(input, [true, true, false, false, true]);
-  const view3 = new ArraySliceView(input, new Slice(1, 5, 2));
-
-  expect(true).toBe(true);
-});
-
-it("Second example", () => {
   const input = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const view1 = new ArrayView(input);

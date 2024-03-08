@@ -13,7 +13,7 @@ export abstract class ArraySelector<T> {
 
 export class ArrayIndexListSelector extends ArraySelector<Array<number>> {
   public select<T>(source: ArrayView<T>): ArrayIndexListView<T> {
-    return new ArrayIndexListView<T>(source.loc, this.value, source);
+    return new ArrayIndexListView<T>(source.loc, { indexes: this.value, parentView: source });
   }
 
   constructor(value: Array<number> | ArrayView<number>) {
@@ -23,7 +23,7 @@ export class ArrayIndexListSelector extends ArraySelector<Array<number>> {
 
 export class ArrayCompressSelector extends ArraySelector<Array<boolean>> {
   public select<T>(source: ArrayView<T>): ArrayCompressView<T> {
-    return new ArrayCompressView<T>(source.loc, this.value, source);
+    return new ArrayCompressView<T>(source.loc, { mask: this.value, parentView: source });
   }
 
   constructor(value: Array<boolean> | ArrayView<boolean>) {
@@ -37,6 +37,6 @@ export class ArraySliceSelector extends ArraySelector<Slice> {
   }
 
   public select<T>(source: ArrayView<T>): ArraySliceView<T> {
-    return new ArraySliceView<T>(source.loc, this.value, source);
+    return new ArraySliceView<T>(source.loc, { slice: this.value, parentView: source });
   }
 }
