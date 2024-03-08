@@ -45,6 +45,7 @@ export class Slice {
   }
 
   public normalize(containerLength: number): NormalizedSlice {
+    // TODO: Need refactor
     let step = this.step ?? 1;
 
     if (step === 0) {
