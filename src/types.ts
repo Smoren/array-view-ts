@@ -19,6 +19,12 @@ export interface ArrayView<T> {
   [Symbol.iterator](): IterableIterator<T>;
 }
 
+export interface Selector<T> {
+  readonly value: T;
+
+  select<U>(source: ArrayView<U>): ArrayView<U>;
+}
+
 export type SliceableArray<T> = Array<T> & {
   [index: string]: Array<T>
 }
