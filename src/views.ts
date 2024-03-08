@@ -1,11 +1,12 @@
 import { ArraySelector, ArrayCompressSelector, ArraySliceSelector } from "./selectors";
 import { normalizeIndex } from "./utils";
-import { KeyError, LengthError } from "./excpetions";
+import { KeyError, LengthError, ReadonlyError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
 import type { ArrayView as IArrayView, SliceableArray } from "./types";
 
 export class ArrayView<T> implements IArrayView<T> {
   public readonly loc: SliceableArray<T>;
+  public readonly isReadonly: boolean;
   protected readonly source: Array<T>;
   protected readonly parentView?: ArrayView<T>;
 
@@ -18,12 +19,17 @@ export class ArrayView<T> implements IArrayView<T> {
   constructor(
     source: Array<T>,
     {
+      readonly = false,
       parentView = undefined,
     }: {
+      readonly?: boolean,
       parentView?: ArrayView<T>,
     } = {},
   ) {
-    // TODO readonly
+    this.source = source;
+    this.parentView = parentView;
+    this.isReadonly = readonly;
+
     this.loc = new Proxy<Array<T>>(source, {
       get: (target, prop) => {
         if (prop === "length") {
@@ -41,6 +47,10 @@ export class ArrayView<T> implements IArrayView<T> {
         return target[this.convertIndex(Number(prop))];
       },
       set: (target, prop, value) => {
+        if (this.isReadonly) {
+          throw new ReadonlyError('Cannot modify a readonly view.');
+        }
+
         if (typeof prop === "string" && Slice.isSliceString(prop)) {
           this.subview(new ArraySliceSelector(prop)).set(value);
           return true;
@@ -54,9 +64,6 @@ export class ArrayView<T> implements IArrayView<T> {
         return true;
       },
     }) as SliceableArray<T>;
-
-    this.source = source;
-    this.parentView = parentView;
   }
 
   public get length(): number {
@@ -132,13 +139,15 @@ export class ArrayIndexListView<T> extends ArrayView<T> {
     source: Array<T>,
     {
       indexes,
+      readonly = false,
       parentView = undefined,
     }: {
       indexes: number[],
+      readonly?: boolean,
       parentView?: ArrayView<T>,
     },
   ) {
-    super(source, { parentView });
+    super(source, { readonly, parentView });
     this.indexes = indexes;
   }
 
@@ -168,9 +177,11 @@ export class ArrayCompressView<T> extends ArrayIndexListView<T> {
     source: Array<T>,
     {
       mask,
+      readonly = false,
       parentView = undefined,
     }: {
       mask: boolean[],
+      readonly?: boolean,
       parentView?: ArrayView<T>,
     },
   ) {
@@ -183,7 +194,7 @@ export class ArrayCompressView<T> extends ArrayIndexListView<T> {
       .map((v, i) => v ? i : null)
       .filter(v => v !== null) as number[];
 
-    super(source, { indexes, parentView });
+    super(source, { indexes, readonly, parentView });
     this.mask = mask;
   }
 }
@@ -195,13 +206,15 @@ export class ArraySliceView<T> extends ArrayView<T> {
     source: Array<T>,
     {
       slice,
+      readonly = false,
       parentView = undefined,
     }: {
       slice: Slice,
+      readonly?: boolean,
       parentView?: ArrayView<T>,
     },
   ) {
-    super(source, { parentView });
+    super(source, { readonly, parentView });
     this.slice = slice.normalize(this.parentLength);
   }
 
