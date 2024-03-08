@@ -1,8 +1,8 @@
 import { ArrayCompressView, ArrayIndexListView, ArraySliceView, ArrayView } from "./views";
 import { Slice } from "./structs";
-import { Selector } from "./types";
+import { SelectorInterface } from "./types";
 
-export abstract class ArraySelector<T> implements Selector<T> {
+export abstract class ArraySelector<T> implements SelectorInterface<T> {
   public readonly value: T;
 
   public abstract select<U>(source: ArrayView<U>): ArrayView<U>;
