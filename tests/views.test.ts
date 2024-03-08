@@ -1012,3 +1012,58 @@ function dataProviderForApplyWithSuccess(): Array<unknown> {
     ],
   ];
 }
+
+describe.each([
+  ...dataProviderForIsAndFilter(),
+] as Array<[Array<number>, (x: number) => boolean, Array<boolean>, Array<number>]>)(
+  "Array View Is And Filter Test",
+  (
+    source: Array<number>,
+    predicate: (x: number) => boolean,
+    expectedMask: Array<boolean>,
+    expectedArray: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const view = new ArrayView<number>(source);
+
+      // When
+      const mask = view.is(predicate);
+      const filtered = view.filter(predicate);
+
+      // Then
+      expect(mask.value).toEqual(expectedMask);
+      expect(view.subview(mask).toArray()).toEqual(expectedArray);
+      expect(filtered.toArray()).toEqual(expectedArray);
+    });
+  },
+);
+
+function dataProviderForIsAndFilter(): Array<unknown> {
+  return [
+    [
+      [],
+      (x: number) => x % 2 === 0,
+      [],
+      [],
+    ],
+    [
+      [1],
+      (x: number) => x % 2 === 0,
+      [false],
+      [],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (x: number) => x % 2 === 0,
+      [false, true, false, true, false, true, false, true, false, true],
+      [2, 4, 6, 8, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (_: number, i: number) => i % 2 === 0,
+      [true, false, true, false, true, false, true, false, true, false],
+      [1, 3, 5, 7, 9],
+    ],
+  ];
+}
