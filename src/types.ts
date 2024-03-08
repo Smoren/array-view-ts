@@ -10,7 +10,7 @@ export interface ArrayViewInterface<T> {
 
   is(predicate: (value: T) => boolean): ArrayCompressSelector;
 
-  subview(selector: ArraySelector<any> | string): ArrayViewInterface<T>;
+  subview(selector: ArraySelector<unknown> | string): ArrayViewInterface<T>;
 
   apply(mapper: (item: T, index: number) => T): void;
 
