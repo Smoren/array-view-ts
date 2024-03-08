@@ -77,7 +77,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     return new ArrayCompressSelector(this.toArray().map(predicate));
   }
 
-  public subview(selector: ArraySelector<any> | string): ArrayView<T> {
+  public subview(selector: ArraySelector<unknown> | string): ArrayView<T> {
     return (selector instanceof ArraySelector)
       ? selector.select(this)
       : (new ArraySliceSelector(selector).select(this));
