@@ -2,7 +2,7 @@ import { MaskSelector, SliceSelector } from "./selectors";
 import { normalizeIndex } from "./utils";
 import { KeyError, LengthError, ReadonlyError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
-import type { ArrayViewInterface, SelectorInterface, SliceableArray } from "./types";
+import type { ArrayViewInterface, ArraySelectorInterface, SliceableArray } from "./types";
 
 export class ArrayView<T> implements ArrayViewInterface<T> {
   public readonly loc: SliceableArray<T>;
@@ -77,7 +77,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     return new MaskSelector(this.toArray().map(predicate));
   }
 
-  public subview(selector: SelectorInterface | string): ArrayViewInterface<T> {
+  public subview(selector: ArraySelectorInterface | string): ArrayViewInterface<T> {
     return (typeof selector === 'string')
       ? (new SliceSelector(selector).select(this))
       : selector.select(this);
