@@ -32,12 +32,16 @@ export class ArrayMaskSelector extends ArraySelector<Array<boolean>> {
   }
 }
 
-export class ArraySliceSelector extends ArraySelector<Slice> {
+export class ArraySliceSelector extends Slice implements SelectorInterface<Slice> {
+  public readonly value: Slice;
+
   constructor(slice: Slice | string) {
-    super(slice instanceof Slice ? slice : Slice.toSlice(slice));
+    const s = Slice.toSlice(slice);
+    super(s.start, s.end, s.step);
+    this.value = this;
   }
 
   public select<T>(source: ArrayView<T>): ArraySliceView<T> {
-    return new ArraySliceView<T>(source, { slice: this.value });
+    return new ArraySliceView<T>(source, { slice: this });
   }
 }
