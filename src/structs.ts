@@ -25,7 +25,7 @@ export class Slice {
   }
 
   public static isSliceString(s: unknown): boolean {
-    if (typeof s !== 'string') {
+    if (typeof s !== "string") {
       return false;
     }
 
@@ -56,15 +56,15 @@ export class Slice {
     let start = this.start ?? (step > 0 ? 0 : containerLength - 1);
     let end = this.end ?? (step > 0 ? containerLength : -1);
 
-    start = Math.round(start)
-    end = Math.round(end)
-    step = Math.round(step)
+    start = Math.round(start);
+    end = Math.round(end);
+    step = Math.round(step);
 
     start = normalizeIndex(start, containerLength, false);
     end = normalizeIndex(end, containerLength, false);
 
     if (step > 0 && start >= containerLength) {
-      start = end = containerLength - 1
+      start = end = containerLength - 1;
     } else if (step < 0 && start < 0) {
       start = end = 0;
       defaultEnd = 0;
@@ -81,17 +81,17 @@ export class Slice {
   }
 
   public toString(): string {
-    return `${this.start ?? ''}:${this.end ?? ''}:${this.step ?? ''}`;
+    return `${this.start ?? ""}:${this.end ?? ""}:${this.step ?? ""}`;
   }
 
   private static parseSliceString(s: string): (number | undefined)[] {
-    return s.split(':')
+    return s.split(":")
       .map(x => x.trim())
-      .map(x => (x === '') ? undefined : parseInt(x));
+      .map(x => (x === "") ? undefined : parseInt(x));
   }
 
   private squeezeInBounds(x: number, min: number, max: number): number {
-    return Math.max(min, Math.min(max, x))
+    return Math.max(min, Math.min(max, x));
   }
 }
 
@@ -115,7 +115,7 @@ export class NormalizedSlice extends Slice {
     return this.start + normalizeIndex(i, this.length, false) * this.step;
   }
 
-  public *toRange(): IterableIterator<number> {
+  public* toRange(): IterableIterator<number> {
     for (let i = 0; i < this.length; ++i) {
       yield this.convertIndex(i);
     }

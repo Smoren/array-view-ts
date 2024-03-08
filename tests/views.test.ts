@@ -29,6 +29,7 @@ describe.each([
 
       // And then
       expect(view.toArray()).toEqual(source);
+      expect([...view]).toEqual(source);
     });
   },
 );
@@ -66,6 +67,7 @@ describe.each([
 
       // And then
       expect(view.toArray()).toEqual(toWrite);
+      expect([...view]).toEqual(toWrite);
       expect(source).toEqual(toWrite);
     });
   },
@@ -88,6 +90,7 @@ describe.each([
 
       // And then
       expect(view.toArray()).toEqual(toWrite);
+      expect([...view]).toEqual(toWrite);
       expect(source).toEqual(toWrite);
     });
   },
@@ -110,6 +113,7 @@ describe.each([
 
       // And then
       expect(view.toArray()).toEqual(toWrite);
+      expect([...view]).toEqual(toWrite);
       expect(source).toEqual(toWrite);
     });
   },
@@ -146,6 +150,7 @@ describe.each([
 
       // And then
       expect(view.toArray()).toEqual(expected);
+      expect([...view]).toEqual(expected);
       expect(source).toEqual(expected);
     });
   },
@@ -187,6 +192,9 @@ describe.each([
       // And then
       expect(view.toArray()).toEqual(source);
       expect(subview.toArray()).toEqual(expected);
+
+      expect([...view]).toEqual(source);
+      expect([...subview]).toEqual(expected);
     });
   },
 );
@@ -234,6 +242,10 @@ describe.each([
 
       expect(subview.toArray()).toEqual(expectedSubview);
       expect(view.toArray()).toEqual(expectedView);
+
+      expect([...subview]).toEqual(expectedSubview);
+      expect([...view]).toEqual(expectedView);
+
       expect(source).toEqual(expectedView);
     });
   },
@@ -356,6 +368,9 @@ describe.each([
       // And then
       expect(view.toArray()).toEqual(source);
       expect(subview.toArray()).toEqual(expected);
+
+      expect([...view]).toEqual(source);
+      expect([...subview]).toEqual(expected);
     });
   },
 );
@@ -398,6 +413,10 @@ describe.each([
 
       expect(subview.toArray()).toEqual(expectedSubview);
       expect(view.toArray()).toEqual(expectedView);
+
+      expect([...subview]).toEqual(expectedSubview);
+      expect([...view]).toEqual(expectedView);
+
       expect(source).toEqual(expectedView);
     });
   },
@@ -492,6 +511,9 @@ describe.each([
       // And then
       expect(view.toArray()).toEqual(source);
       expect(subview.toArray()).toEqual(expected);
+
+      expect([...view]).toEqual(source);
+      expect([...subview]).toEqual(expected);
     });
   },
 );
