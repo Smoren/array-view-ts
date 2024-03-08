@@ -2,7 +2,7 @@ import { ArrayCompressView, ArrayIndexListView, ArraySliceView, ArrayView } from
 import { Slice } from "./structs";
 import { SelectorInterface } from "./types";
 
-export abstract class ArraySelector<T> implements SelectorInterface<T> {
+export abstract class Selector<T> implements SelectorInterface {
   public readonly value: T;
 
   public abstract select<U>(source: ArrayView<U>): ArrayView<U>;
@@ -12,7 +12,7 @@ export abstract class ArraySelector<T> implements SelectorInterface<T> {
   }
 }
 
-export class ArrayIndexListSelector extends ArraySelector<Array<number>> {
+export class IndexListSelector extends Selector<Array<number>> {
   public select<T>(source: ArrayView<T>): ArrayIndexListView<T> {
     return new ArrayIndexListView<T>(source, { indexes: this.value });
   }
@@ -22,7 +22,7 @@ export class ArrayIndexListSelector extends ArraySelector<Array<number>> {
   }
 }
 
-export class ArrayMaskSelector extends ArraySelector<Array<boolean>> {
+export class MaskSelector extends Selector<Array<boolean>> {
   public select<T>(source: ArrayView<T>): ArrayCompressView<T> {
     return new ArrayCompressView<T>(source, { mask: this.value });
   }
@@ -32,13 +32,10 @@ export class ArrayMaskSelector extends ArraySelector<Array<boolean>> {
   }
 }
 
-export class ArraySliceSelector extends Slice implements SelectorInterface<Slice> {
-  public readonly value: Slice;
-
+export class SliceSelector extends Slice implements SelectorInterface {
   constructor(slice: Slice | string) {
     const s = Slice.toSlice(slice);
     super(s.start, s.end, s.step);
-    this.value = this;
   }
 
   public select<T>(source: ArrayView<T>): ArraySliceView<T> {

@@ -1,19 +1,19 @@
 import { ArrayView } from "./views";
 import { Slice } from "./structs";
-import { ArrayIndexListSelector, ArrayMaskSelector, ArraySliceSelector } from "./selectors";
+import { IndexListSelector, MaskSelector, SliceSelector } from "./selectors";
 
 export function view<T>(source: Array<T> | ArrayView<T>): ArrayView<T> {
   return ArrayView.toView(source);
 }
 
-export function slice(slice: string | Slice): ArraySliceSelector {
-  return new ArraySliceSelector(Slice.toSlice(slice));
+export function slice(slice: string | Slice): SliceSelector {
+  return new SliceSelector(Slice.toSlice(slice));
 }
 
-export function mask(mask: Array<boolean> | ArrayView<boolean>): ArrayMaskSelector {
-  return new ArrayMaskSelector(mask);
+export function mask(mask: Array<boolean> | ArrayView<boolean>): MaskSelector {
+  return new MaskSelector(mask);
 }
 
-export function select(indexes: Array<number> | ArrayView<number>): ArrayIndexListSelector {
-  return new ArrayIndexListSelector(indexes);
+export function select(indexes: Array<number> | ArrayView<number>): IndexListSelector {
+  return new IndexListSelector(indexes);
 }
