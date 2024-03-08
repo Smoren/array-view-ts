@@ -2,9 +2,9 @@ import { ArraySelector, ArrayCompressSelector, ArraySliceSelector } from "./sele
 import { normalizeIndex } from "./utils";
 import { KeyError, LengthError, ReadonlyError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
-import type { ArrayView as IArrayView, SliceableArray } from "./types";
+import type { ArrayViewInterface, SliceableArray } from "./types";
 
-export class ArrayView<T> implements IArrayView<T> {
+export class ArrayView<T> implements ArrayViewInterface<T> {
   public readonly loc: SliceableArray<T>;
   public readonly isReadonly: boolean;
   protected readonly source: Array<T>;
