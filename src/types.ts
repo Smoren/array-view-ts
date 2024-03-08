@@ -1,4 +1,4 @@
-import { ArrayCompressSelector, ArraySelector } from './selectors';
+import { ArrayMaskSelector, ArraySelector } from './selectors';
 
 export interface ArrayViewInterface<T> {
   readonly loc: SliceableArray<T>;
@@ -8,7 +8,7 @@ export interface ArrayViewInterface<T> {
 
   filter(predicate: (value: T) => boolean): ArrayViewInterface<T>;
 
-  is(predicate: (value: T) => boolean): ArrayCompressSelector;
+  is(predicate: (value: T) => boolean): ArrayMaskSelector;
 
   subview(selector: ArraySelector<unknown> | string): ArrayViewInterface<T>;
 

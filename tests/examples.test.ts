@@ -7,7 +7,7 @@ import {
 } from "../src/views";
 import {
   ArrayIndexListSelector,
-  ArrayCompressSelector, ArraySliceSelector,
+  ArrayMaskSelector, ArraySliceSelector,
 } from "../src/selectors";
 import { Slice } from "../src/structs";
 
@@ -15,7 +15,7 @@ it("First example", () => {
   const input = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const view1 = new ArrayView(input);
-  const view2 = view1.subview(new ArrayCompressSelector([true, false, true, false, true, false, true, false, true, false]));
+  const view2 = view1.subview(new ArrayMaskSelector([true, false, true, false, true, false, true, false, true, false]));
   const view3 = view2.subview(new ArrayIndexListSelector(new ArrayView([0, 1, 3, 4])));
   const view4 = view3.subview(new ArraySliceSelector('1:-1:1'));
 

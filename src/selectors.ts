@@ -22,7 +22,7 @@ export class ArrayIndexListSelector extends ArraySelector<Array<number>> {
   }
 }
 
-export class ArrayCompressSelector extends ArraySelector<Array<boolean>> {
+export class ArrayMaskSelector extends ArraySelector<Array<boolean>> {
   public select<T>(source: ArrayView<T>): ArrayCompressView<T> {
     return new ArrayCompressView<T>(source, { mask: this.value });
   }
