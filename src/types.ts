@@ -1,28 +1,27 @@
-import { ArrayMaskSelector, ArraySelector } from './selectors';
-
 export interface ArrayViewInterface<T> {
   readonly loc: SliceableArray<T>;
   readonly length: number;
+  readonly isReadonly: boolean;
 
   toArray(): Array<T>;
 
   filter(predicate: (value: T) => boolean): ArrayViewInterface<T>;
 
-  is(predicate: (value: T) => boolean): ArrayMaskSelector;
+  is(predicate: (value: T) => boolean): SelectorInterface;
 
-  subview(selector: ArraySelector<unknown> | string): ArrayViewInterface<T>;
+  subview(selector: SelectorInterface | string): ArrayViewInterface<T>;
 
   apply(mapper: (item: T, index: number) => T): void;
+
+  applyWith<U>(data: Array<U> | ArrayViewInterface<U>, mapper: (lhs: T, rhs: U, index: number) => T): ArrayViewInterface<T>;
 
   set(newValues: Array<T> | ArrayViewInterface<T>): void;
 
   [Symbol.iterator](): IterableIterator<T>;
 }
 
-export interface SelectorInterface<T> {
-  readonly value: T;
-
-  select<U>(source: ArrayViewInterface<U>): ArrayViewInterface<U>;
+export interface SelectorInterface {
+  select<T>(source: ArrayViewInterface<T>): ArrayViewInterface<T>;
 }
 
 export type SliceableArray<T> = Array<T> & {

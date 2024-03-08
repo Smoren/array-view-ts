@@ -1,8 +1,8 @@
-import { ArraySelector, ArrayMaskSelector, ArraySliceSelector } from "./selectors";
+import { MaskSelector, SliceSelector } from "./selectors";
 import { normalizeIndex } from "./utils";
 import { KeyError, LengthError, ReadonlyError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
-import type { ArrayViewInterface, SliceableArray } from "./types";
+import type { ArrayViewInterface, SelectorInterface, SliceableArray } from "./types";
 
 export class ArrayView<T> implements ArrayViewInterface<T> {
   public readonly loc: SliceableArray<T>;
@@ -32,7 +32,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
         }
 
         if (typeof prop === "string" && Slice.isSliceString(prop)) {
-          return this.subview(new ArraySliceSelector(prop)).toArray();
+          return this.subview(new SliceSelector(prop)).toArray();
         }
 
         if (!Number.isInteger(Number(prop))) {
@@ -47,7 +47,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
         }
 
         if (typeof prop === "string" && Slice.isSliceString(prop)) {
-          this.subview(new ArraySliceSelector(prop)).set(value);
+          this.subview(new SliceSelector(prop)).set(value);
           return true;
         }
 
@@ -73,14 +73,14 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     return this.is(predicate).select(this);
   }
 
-  public is(predicate: (value: T) => boolean): ArrayMaskSelector {
-    return new ArrayMaskSelector(this.toArray().map(predicate));
+  public is(predicate: (value: T) => boolean): MaskSelector {
+    return new MaskSelector(this.toArray().map(predicate));
   }
 
-  public subview(selector: ArraySelector<unknown> | string): ArrayView<T> {
-    return (selector instanceof ArraySelector)
-      ? selector.select(this)
-      : (new ArraySliceSelector(selector).select(this));
+  public subview(selector: SelectorInterface | string): ArrayViewInterface<T> {
+    return (typeof selector === 'string')
+      ? (new SliceSelector(selector).select(this))
+      : selector.select(this);
   }
 
   public apply(mapper: (item: T, index: number) => T): ArrayView<T> {
