@@ -6,7 +6,11 @@ export class Slice {
   public readonly end: number | undefined;
   public readonly step: number | undefined;
 
-  public static fromString(s: string): Slice {
+  public static toSlice(s: string | Slice): Slice {
+    if (s instanceof Slice) {
+      return s;
+    }
+
     if (!this.isSliceString(s)) {
       throw new ValueError(`Invalid slice: "${s}".`);
     }
