@@ -14,7 +14,7 @@ export abstract class ArraySelector<T> implements ArraySelectorInterface {
 
 export class IndexListSelector extends ArraySelector<Array<number>> {
   public select<T>(source: ArrayView<T>): ArrayIndexListView<T> {
-    return new ArrayIndexListView<T>(source, { indexes: this.value });
+    return new ArrayIndexListView<T>(source, { indexes: this.value, readonly: source.readonly });
   }
 
   constructor(value: Array<number> | ArrayView<number>) {
@@ -24,7 +24,7 @@ export class IndexListSelector extends ArraySelector<Array<number>> {
 
 export class MaskSelector extends ArraySelector<Array<boolean>> {
   public select<T>(source: ArrayView<T>): ArrayCompressView<T> {
-    return new ArrayCompressView<T>(source, { mask: this.value });
+    return new ArrayCompressView<T>(source, { mask: this.value, readonly: source.readonly });
   }
 
   constructor(value: Array<boolean> | ArrayView<boolean>) {
@@ -39,6 +39,6 @@ export class SliceSelector extends Slice implements ArraySelectorInterface {
   }
 
   public select<T>(source: ArrayView<T>): ArraySliceView<T> {
-    return new ArraySliceView<T>(source, { slice: this });
+    return new ArraySliceView<T>(source, { slice: this, readonly: source.readonly });
   }
 }
