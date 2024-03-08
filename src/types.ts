@@ -1,7 +1,7 @@
 export interface ArrayViewInterface<T> {
   readonly loc: SliceableArray<T>;
   readonly length: number;
-  readonly isReadonly: boolean;
+  readonly readonly: boolean;
 
   toArray(): Array<T>;
 

@@ -6,7 +6,7 @@ import type { ArrayViewInterface, ArraySelectorInterface, SliceableArray } from 
 
 export class ArrayView<T> implements ArrayViewInterface<T> {
   public readonly loc: SliceableArray<T>;
-  public readonly isReadonly: boolean;
+  public readonly readonly: boolean;
   protected readonly source: Array<T>;
   protected readonly parentView?: ArrayView<T>;
 
@@ -23,7 +23,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     const loc = (source instanceof ArrayView) ? source.loc : source;
     this.source = (source instanceof ArrayView) ? source.source : source;
     this.parentView = (source instanceof ArrayView) ? source : undefined;
-    this.isReadonly = readonly;
+    this.readonly = readonly;
 
     this.loc = new Proxy<Array<T>>(loc, {
       get: (target, prop) => {
@@ -42,7 +42,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
         return target[this.convertIndex(Number(prop))];
       },
       set: (target, prop, value) => {
-        if (this.isReadonly) {
+        if (this.readonly) {
           throw new ReadonlyError('Cannot modify a readonly view.');
         }
 
