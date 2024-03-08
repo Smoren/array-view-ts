@@ -1,4 +1,4 @@
-import { ArraySelector, ArrayCompressSelector, ArraySliceSelector } from "./selectors";
+import { ArraySelector, ArrayMaskSelector, ArraySliceSelector } from "./selectors";
 import { normalizeIndex } from "./utils";
 import { KeyError, LengthError, ReadonlyError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
@@ -73,8 +73,8 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     return this.is(predicate).select(this);
   }
 
-  public is(predicate: (value: T) => boolean): ArrayCompressSelector {
-    return new ArrayCompressSelector(this.toArray().map(predicate));
+  public is(predicate: (value: T) => boolean): ArrayMaskSelector {
+    return new ArrayMaskSelector(this.toArray().map(predicate));
   }
 
   public subview(selector: ArraySelector<unknown> | string): ArrayView<T> {
