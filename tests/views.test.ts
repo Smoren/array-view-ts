@@ -6,6 +6,7 @@ import {
   // @ts-ignore
 } from "./fixtures/python-slices";
 import { Slice } from "../src/structs";
+import { view } from "../src/functions";
 
 describe.each([
   ...dataProviderForReadSuccess(),
@@ -16,11 +17,11 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
+      const v = view(source);
 
       for (let i = 0; i < source.length; i++) {
         // When
-        const actual = view.loc[i];
+        const actual = v.loc[i];
         const expected = source[i];
 
         // Then
@@ -28,8 +29,8 @@ describe.each([
       }
 
       // And then
-      expect(view.toArray()).toEqual(source);
-      expect([...view]).toEqual(source);
+      expect(v.toArray()).toEqual(source);
+      expect([...v]).toEqual(source);
     });
   },
 );
@@ -54,20 +55,20 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
+      const v = view(source);
 
       for (let i = 0; i < source.length; i++) {
         // When
-        view.loc[i] = toWrite[i];
+        v.loc[i] = toWrite[i];
 
         // Then
-        expect(view.loc[i]).toBe(toWrite[i]);
+        expect(v.loc[i]).toBe(toWrite[i]);
         expect(source[i]).toBe(toWrite[i]);
       }
 
       // And then
-      expect(view.toArray()).toEqual(toWrite);
-      expect([...view]).toEqual(toWrite);
+      expect(v.toArray()).toEqual(toWrite);
+      expect([...v]).toEqual(toWrite);
       expect(source).toEqual(toWrite);
     });
   },
@@ -83,14 +84,14 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
+      const v = view(source);
 
       // When
-      view.set(toWrite);
+      v.set(toWrite);
 
       // And then
-      expect(view.toArray()).toEqual(toWrite);
-      expect([...view]).toEqual(toWrite);
+      expect(v.toArray()).toEqual(toWrite);
+      expect([...v]).toEqual(toWrite);
       expect(source).toEqual(toWrite);
     });
   },
@@ -106,14 +107,14 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
+      const v = view(source);
 
       // When
-      view.loc[':'] = toWrite;
+      v.loc[':'] = toWrite;
 
       // And then
-      expect(view.toArray()).toEqual(toWrite);
-      expect([...view]).toEqual(toWrite);
+      expect(v.toArray()).toEqual(toWrite);
+      expect([...v]).toEqual(toWrite);
       expect(source).toEqual(toWrite);
     });
   },
@@ -137,20 +138,20 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
+      const v = view(source);
 
       for (let i = 0; i < source.length; i++) {
         // When
-        view.loc[i]++;
+        v.loc[i]++;
 
         // Then
-        expect(view.loc[i]).toBe(expected[i]);
+        expect(v.loc[i]).toBe(expected[i]);
         expect(source[i]).toBe(expected[i]);
       }
 
       // And then
-      expect(view.toArray()).toEqual(expected);
-      expect([...view]).toEqual(expected);
+      expect(v.toArray()).toEqual(expected);
+      expect([...v]).toEqual(expected);
       expect(source).toEqual(expected);
     });
   },
@@ -175,8 +176,8 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
-      const subview = view.subview(new ArrayIndexListSelector(indexes));
+      const v = view(source);
+      const subview = v.subview(new ArrayIndexListSelector(indexes));
 
       expect(subview.length).toEqual(indexes.length);
       expect(subview.length).toEqual(expected.length);
@@ -185,15 +186,15 @@ describe.each([
         expect(subview.loc[i]).toBe(expected[i]);
       }
 
-      for (let i = 0; i < view.length; i++) {
-        expect(view.loc[i]).toBe(source[i]);
+      for (let i = 0; i < v.length; i++) {
+        expect(v.loc[i]).toBe(source[i]);
       }
 
       // And then
-      expect(view.toArray()).toEqual(source);
+      expect(v.toArray()).toEqual(source);
       expect(subview.toArray()).toEqual(expected);
 
-      expect([...view]).toEqual(source);
+      expect([...v]).toEqual(source);
       expect([...subview]).toEqual(expected);
     });
   },
@@ -230,21 +231,21 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
-      const subview = view.subview(new ArrayIndexListSelector(indexes));
+      const v = view(source);
+      const subview = v.subview(new ArrayIndexListSelector(indexes));
 
       // Then
-      expect(view.toArray()).toEqual(source);
+      expect(v.toArray()).toEqual(source);
 
       for (let i = 0; i < subview.length; i++) {
         ++subview.loc[i];
       }
 
       expect(subview.toArray()).toEqual(expectedSubview);
-      expect(view.toArray()).toEqual(expectedView);
+      expect(v.toArray()).toEqual(expectedView);
 
       expect([...subview]).toEqual(expectedSubview);
-      expect([...view]).toEqual(expectedView);
+      expect([...v]).toEqual(expectedView);
 
       expect(source).toEqual(expectedView);
     });
@@ -351,8 +352,8 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
-      const subview = view.subview(new ArrayCompressSelector(mask));
+      const v = view(source);
+      const subview = v.subview(new ArrayCompressSelector(mask));
 
       expect(subview.length).toEqual(mask.filter((x) => x).length);
       expect(subview.length).toEqual(expected.length);
@@ -361,15 +362,15 @@ describe.each([
         expect(subview.loc[i]).toBe(expected[i]);
       }
 
-      for (let i = 0; i < view.length; i++) {
-        expect(view.loc[i]).toBe(source[i]);
+      for (let i = 0; i < v.length; i++) {
+        expect(v.loc[i]).toBe(source[i]);
       }
 
       // And then
-      expect(view.toArray()).toEqual(source);
+      expect(v.toArray()).toEqual(source);
       expect(subview.toArray()).toEqual(expected);
 
-      expect([...view]).toEqual(source);
+      expect([...v]).toEqual(source);
       expect([...subview]).toEqual(expected);
     });
   },
@@ -401,21 +402,21 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
-      const subview = view.subview(new ArrayCompressSelector(mask));
+      const v = view(source);
+      const subview = v.subview(new ArrayCompressSelector(mask));
 
       // Then
-      expect(view.toArray()).toEqual(source);
+      expect(v.toArray()).toEqual(source);
 
       for (let i = 0; i < subview.length; i++) {
         ++subview.loc[i];
       }
 
       expect(subview.toArray()).toEqual(expectedSubview);
-      expect(view.toArray()).toEqual(expectedView);
+      expect(v.toArray()).toEqual(expectedView);
 
       expect([...subview]).toEqual(expectedSubview);
-      expect([...view]).toEqual(expectedView);
+      expect([...v]).toEqual(expectedView);
 
       expect(source).toEqual(expectedView);
     });
@@ -494,8 +495,8 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
-      const subview = view.subview(config);
+      const v = view(source);
+      const subview = v.subview(config);
 
       expect(subview.toArray()).toEqual(expected);
       expect(subview.length).toEqual(expected.length);
@@ -504,15 +505,15 @@ describe.each([
         expect(subview.loc[i]).toBe(expected[i]);
       }
 
-      for (let i = 0; i < view.length; i++) {
-        expect(view.loc[i]).toBe(source[i]);
+      for (let i = 0; i < v.length; i++) {
+        expect(v.loc[i]).toBe(source[i]);
       }
 
       // And then
-      expect(view.toArray()).toEqual(source);
+      expect(v.toArray()).toEqual(source);
       expect(subview.toArray()).toEqual(expected);
 
-      expect([...view]).toEqual(source);
+      expect([...v]).toEqual(source);
       expect([...subview]).toEqual(expected);
     });
   },
@@ -531,8 +532,8 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
-      const slicedArray = view.loc[config];
+      const v = view(source);
+      const slicedArray = v.loc[config];
 
       expect(slicedArray).toEqual(expected);
       expect(slicedArray.length).toEqual(expected.length);
@@ -541,12 +542,12 @@ describe.each([
         expect(slicedArray[i]).toBe(expected[i]);
       }
 
-      for (let i = 0; i < view.length; i++) {
-        expect(view.loc[i]).toBe(source[i]);
+      for (let i = 0; i < v.length; i++) {
+        expect(v.loc[i]).toBe(source[i]);
       }
 
       // And then
-      expect(view.toArray()).toEqual(source);
+      expect(v.toArray()).toEqual(source);
       expect(slicedArray).toEqual(expected);
     });
   },
@@ -617,13 +618,13 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
+      const v = view(source);
 
       // When
-      view.loc[config] = toWrite;
+      v.loc[config] = toWrite;
 
       // And then
-      expect(view.toArray()).toEqual(expected);
+      expect(v.toArray()).toEqual(expected);
       expect(source).toEqual(expected);
     });
   },
@@ -661,10 +662,10 @@ describe.each([
   ) => {
     it("", () => {
       // When
-      const view = viewGetter(source);
+      const v = viewGetter(source);
 
       // Then
-      expect(view.toArray()).toEqual(expected);
+      expect(v.toArray()).toEqual(expected);
     });
   },
 );
@@ -673,20 +674,20 @@ function dataProviderForCombineReadSuccess(): Array<unknown> {
   return [
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2'),
       [1, 3, 5, 7, 9],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview(new ArrayCompressSelector([true, false, true, false, true])),
       [1, 5, 9],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview(new ArrayCompressSelector([true, false, true, false, true]))
         .subview(new ArrayIndexListSelector([0, 2])),
@@ -694,7 +695,7 @@ function dataProviderForCombineReadSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview(new ArrayCompressSelector([true, false, true, false, true]))
         .subview(new ArrayIndexListSelector([0, 2]))
@@ -703,7 +704,7 @@ function dataProviderForCombineReadSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview(new ArrayCompressSelector([true, false, true, false, true, false, true, false, true, false]))
         .subview(new ArrayCompressSelector([true, false, true, false, true]))
         .subview(new ArrayCompressSelector([true, false, true]))
@@ -712,7 +713,7 @@ function dataProviderForCombineReadSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview(new ArrayCompressSelector([true, false, true, false, true, false, true, false, true, false]))
         .subview(new ArrayCompressSelector([true, false, true, false, true]))
         .subview(new ArrayCompressSelector([true, false, true])),
@@ -720,7 +721,7 @@ function dataProviderForCombineReadSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview(new ArrayIndexListSelector([0, 2, 4, 6, 8]))
         .subview(new ArrayIndexListSelector([0, 2, 4]))
         .subview(new ArrayIndexListSelector([0, 2]))
@@ -729,7 +730,7 @@ function dataProviderForCombineReadSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview('::2')
         .subview('::2'),
@@ -737,7 +738,7 @@ function dataProviderForCombineReadSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview('::2')
         .subview('::2')
@@ -759,10 +760,10 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = viewGetter(source);
+      const v = viewGetter(source);
 
       // When
-      view.set(toWrite)
+      v.set(toWrite)
 
       // Then
       expect(source).toEqual(expected);
@@ -782,10 +783,10 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = viewGetter(source);
+      const v = viewGetter(source);
 
       // When
-      view.loc[':'] = toWrite;
+      v.loc[':'] = toWrite;
 
       // Then
       expect(source).toEqual(expected);
@@ -797,14 +798,14 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
   return [
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2'),
       [11, 33, 55, 77, 99],
       [11, 2, 33, 4, 55, 6, 77, 8, 99, 10],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview(new ArrayCompressSelector([true, false, true, false, true])),
       [11, 55, 99],
@@ -812,7 +813,7 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview(new ArrayCompressSelector([true, false, true, false, true]))
         .subview(new ArrayIndexListSelector([0, 2])),
@@ -821,7 +822,7 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview(new ArrayCompressSelector([true, false, true, false, true]))
         .subview(new ArrayIndexListSelector([0, 2]))
@@ -831,7 +832,7 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview(new ArrayCompressSelector([true, false, true, false, true, false, true, false, true, false]))
         .subview(new ArrayCompressSelector([true, false, true, false, true]))
         .subview(new ArrayCompressSelector([true, false, true]))
@@ -841,8 +842,8 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
-        .subview(new ArrayCompressSelector(new ArrayView<boolean>([true, false, true, false, true, false, true, false, true, false])))
+      (source: Array<number>) => view(source)
+        .subview(new ArrayCompressSelector(view([true, false, true, false, true, false, true, false, true, false])))
         .subview(new ArrayCompressSelector([true, false, true, false, true]))
         .subview(new ArrayCompressSelector([true, false, true])),
       [11, 99],
@@ -850,7 +851,7 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview(new ArrayIndexListSelector([0, 2, 4, 6, 8]))
         .subview(new ArrayIndexListSelector([0, 2, 4]))
         .subview(new ArrayIndexListSelector([0, 2]))
@@ -860,7 +861,7 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview('::2')
         .subview('::2')
@@ -870,7 +871,7 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView<number>(source)
+      (source: Array<number>) => view(source)
         .subview(new ArraySliceSelector(new Slice(undefined, undefined, 2)))
         .subview(new ArraySliceSelector('::2'))
         .subview('::2'),
@@ -897,10 +898,10 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = viewGetter(source);
+      const v = viewGetter(source);
 
       // When
-      view.apply(mapper)
+      v.apply(mapper)
 
       // Then
       expect(source).toEqual(expected);
@@ -912,51 +913,51 @@ function dataProviderForApplySuccess(): Array<unknown> {
   return [
     [
       [],
-      (source: Array<number>) => new ArrayView(source),
+      (source: Array<number>) => view(source),
       (item: number) => item + 1,
       [],
     ],
     [
       [1],
-      (source: Array<number>) => new ArrayView(source),
+      (source: Array<number>) => view(source),
       (item: number) => item + 1,
       [2],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView(source),
+      (source: Array<number>) => view(source),
       (item: number) => item,
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView(source),
+      (source: Array<number>) => view(source),
       (item: number) => item + 1,
       [2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView(source),
+      (source: Array<number>) => view(source),
       (item: number, index: number) => item + index,
       [1, 3, 5, 7, 9, 11, 13, 15, 17, 19],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView(source)
+      (source: Array<number>) => view(source)
         .subview('::2'),
       (item: number, index: number) => item + index,
       [1, 2, 4, 4, 7, 6, 10, 8, 13, 10],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView(source)
+      (source: Array<number>) => view(source)
         .subview('1::2'),
       (item: number) => item * 2,
       [1, 4, 3, 8, 5, 12, 7, 16, 9, 20],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView(source)
+      (source: Array<number>) => view(source)
         .subview('1::2')
         .subview(new ArrayIndexListSelector([0, 1, 2])),
       (item: number) => item * 2,
@@ -984,10 +985,10 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = viewGetter(source);
+      const v = viewGetter(source);
 
       // When
-      view.applyWith(arg, mapper)
+      v.applyWith(arg, mapper)
 
       // Then
       expect(source).toEqual(expected);
@@ -999,35 +1000,35 @@ function dataProviderForApplyWithSuccess(): Array<unknown> {
   return [
     [
       [],
-      (source: Array<number>) => new ArrayView(source),
+      (source: Array<number>) => view(source),
       (lhs: number, rhs: number) => lhs + rhs,
       [],
       [],
     ],
     [
       [1],
-      (source: Array<number>) => new ArrayView(source),
+      (source: Array<number>) => view(source),
       (lhs: number, rhs: number) => lhs + rhs,
       [2],
       [3],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView(source),
+      (source: Array<number>) => view(source),
       (lhs: number, rhs: number) => lhs + rhs,
       [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
       [11, 22, 33, 44, 55, 66, 77, 88, 99, 110],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView(source),
+      (source: Array<number>) => view(source),
       (lhs: number, rhs: number, index: number) => index % 2 === 0 ? lhs : rhs,
       [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
       [1, 20, 3, 40, 5, 60, 7, 80, 9, 100],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: Array<number>) => new ArrayView(source).subview('::2'),
+      (source: Array<number>) => view(source).subview('::2'),
       (lhs: number, rhs: number) => lhs * rhs,
       [1, 2, 3, 4, 5],
       [1, 2, 6, 4, 15, 6, 28, 8, 45, 10],
@@ -1047,15 +1048,15 @@ describe.each([
   ) => {
     it("", () => {
       // Given
-      const view = new ArrayView<number>(source);
+      const v = view(source);
 
       // When
-      const mask = view.is(predicate);
-      const filtered = view.filter(predicate);
+      const mask = v.is(predicate);
+      const filtered = v.filter(predicate);
 
       // Then
       expect(mask.value).toEqual(expectedMask);
-      expect(view.subview(mask).toArray()).toEqual(expectedArray);
+      expect(v.subview(mask).toArray()).toEqual(expectedArray);
       expect(filtered.toArray()).toEqual(expectedArray);
     });
   },
