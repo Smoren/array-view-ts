@@ -214,7 +214,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
    * @protected
    */
   protected convertIndex(i: number): number {
-    return normalizeIndex(i, this.source.length);
+    return normalizeIndex(i, this.loc.length);
   }
 }
 
