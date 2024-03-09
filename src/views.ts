@@ -122,7 +122,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     return this;
   }
 
-  public set(newValues: Array<T> | ArrayView<T>): void {
+  public set(newValues: Array<T> | ArrayView<T>): ArrayView<T> {
     if (newValues.length !== this.length) {
       throw new LengthError(`Length of values array not equal to view length (${newValues.length} != ${this.length}).`);
     }
@@ -131,6 +131,8 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     for (let i = 0; i < this.length; ++i) {
       this.loc[i] = newValuesView.loc[i];
     }
+
+    return this;
   }
 
   * [Symbol.iterator](): IterableIterator<T> {
