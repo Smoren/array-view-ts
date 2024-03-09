@@ -35,7 +35,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
           return this.subview(new SliceSelector(prop)).toArray();
         }
 
-        if (!Number.isInteger(Number(prop))) {
+        if (prop === '' || !Number.isInteger(Number(prop))) {
           throw new KeyError(`Invalid key: "${String(prop)}".`);
         }
 
@@ -51,7 +51,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
           return true;
         }
 
-        if (!Number.isInteger(Number(prop))) {
+        if (prop === '' || !Number.isInteger(Number(prop))) {
           throw new KeyError(`Invalid key: "${String(prop)}".`);
         }
 
