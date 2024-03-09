@@ -39,7 +39,7 @@ export interface ArrayViewInterface<T> {
   /**
    * Filters the elements in the view based on a predicate function.
    *
-   * @param {function(value: T): boolean} predicate Function that returns a boolean value for each element.
+   * @param {function(value: T): boolean} predicate - Function that returns a boolean value for each element.
    *
    * @returns {ArrayViewInterface<T>} A new view with elements that satisfy the predicate.
    */
@@ -48,7 +48,7 @@ export interface ArrayViewInterface<T> {
   /**
    * Checks if all elements in the view satisfy a given predicate function.
    *
-   * @param {function(value: T): boolean} predicate Function that returns a boolean value for each element.
+   * @param {function(value: T): boolean} predicate - Function that returns a boolean value for each element.
    *
    * @returns {ArraySelectorInterface} Boolean mask for selecting elements that satisfy the predicate.
    */
@@ -57,8 +57,8 @@ export interface ArrayViewInterface<T> {
   /**
    * Returns a subview of this view based on a selector or string slice.
    *
-   * @param {ArraySelectorInterface | string} selector The selector or string to filter the subview.
-   * @param {boolean} [readonly] Flag indicating if the subview should be read-only.
+   * @param {ArraySelectorInterface | string} selector - The selector or string to filter the subview.
+   * @param {boolean} [readonly] - Flag indicating if the subview should be read-only.
    *
    * @returns {ArrayViewInterface<T>} A new view representing the subview of this view.
    */
@@ -67,7 +67,7 @@ export interface ArrayViewInterface<T> {
   /**
    * Applies a transformation function to each element in the view.
    *
-   * @param {function(item: T, index: number): T} mapper Function to transform each element.
+   * @param {function(item: T, index: number): T} mapper - Function to transform each element.
    *
    * @returns {ArrayViewInterface<T>} this view.
    */
@@ -78,8 +78,8 @@ export interface ArrayViewInterface<T> {
    *
    * @template U The type rhs of a binary operation.
    *
-   * @param {Array<U> | ArrayViewInterface<U>} data The rhs values for a binary operation.
-   * @param {function(lhs: T, rhs: U, index: number): T} mapper Function to transform each pair of elements.
+   * @param {Array<U> | ArrayViewInterface<U>} data - The rhs values for a binary operation.
+   * @param {function(lhs: T, rhs: U, index: number): T} mapper - Function to transform each pair of elements.
    *
    * @returns {ArrayViewInterface<T>} this view.
    */
@@ -88,7 +88,7 @@ export interface ArrayViewInterface<T> {
   /**
    * Sets new values for the elements in the view.
    *
-   * @param {Array<T> | ArrayViewInterface<T>} newValues The new values to set.
+   * @param {Array<T> | ArrayViewInterface<T>} newValues - The new values to set.
    *
    * @returns {ArrayViewInterface<T>} this view.
    */
@@ -109,10 +109,10 @@ export interface ArraySelectorInterface {
   /**
    * Selects elements from a source array view based on the selector criteria.
    *
-   * @template T The type of elements in the source array view.
+   * @template T - The type of elements in the source array view.
    *
-   * @param {ArrayViewInterface<T>} source The source array view to select elements from.
-   * @param {boolean} [readonly] Flag indicating if the result view should be read-only.
+   * @param {ArrayViewInterface<T>} source - The source array view to select elements from.
+   * @param {boolean} [readonly] - Flag indicating if the result view should be read-only.
    *
    * @returns {ArrayViewInterface<T>} A new view with selected elements from the source.
    */
@@ -122,7 +122,7 @@ export interface ArraySelectorInterface {
 /**
  * Type representing an array that can be sliced.
  *
- * @template T The type of elements in the array.
+ * @template T - The type of elements in the array.
  */
 export type SliceableArray<T> = Array<T> & {
   [index: string]: Array<T>
