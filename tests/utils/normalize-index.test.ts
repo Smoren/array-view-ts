@@ -38,8 +38,59 @@ function dataProviderForSuccess(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForError(),
+  ...dataProviderForNotThrow(),
 ] as Array<[Array<number>, number, number]>)(
+  "Normalize Index Not Throw Test",
+  (
+    source: Array<number>,
+    index: number,
+    expected: number,
+  ) => {
+    it("", () => {
+      // When
+      const normalizedIndex = normalizeIndex(index, source.length, false);
+
+      // Then
+      expect(normalizedIndex).toBe(expected);
+    });
+  }
+);
+
+function dataProviderForNotThrow(): Array<unknown> {
+  return [
+    [[1], 0, 0],
+    [[1], -1, 0],
+    [[1, 2], 0, 0],
+    [[1, 2], -1, 1],
+    [[1, 2], 1, 1],
+    [[1, 2], -2, 0],
+    [[1, 2, 3], 0, 0],
+    [[1, 2, 3], -1, 2],
+    [[1, 2, 3], 1, 1],
+    [[1, 2, 3], -2, 1],
+    [[1, 2, 3], 2, 2],
+    [[1, 2, 3], -3, 0],
+
+    [[], 0, 0],
+    [[], -1, -1],
+    [[], 2, 2],
+    [[], -2, -2],
+    [[1], 1, 1],
+    [[1], -2, -1],
+    [[1, 2], 2, 2],
+    [[1, 2], -3, -1],
+    [[1, 2, 3], 3, 3],
+    [[1, 2, 3], -4, -1],
+    [[1, 2, 3], 4, 4],
+    [[1, 2, 3], -5, -2],
+    [[1, 2, 3], 100, 100],
+    [[1, 2, 3], -101, -98],
+  ];
+}
+
+describe.each([
+  ...dataProviderForError(),
+] as Array<[Array<number>, number]>)(
   "Normalize Index Error Test",
   (
     source: Array<number>,
