@@ -99,7 +99,7 @@ function dataProviderForReadonly(): Array<unknown> {
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       (source: ArrayView<number>) => view(source, true)
-        .subview('::2')
+        .subview('::2', true)
         .subview(mask([true, false, true, false, true])),
       [1, 5, 9],
     ],
@@ -272,6 +272,11 @@ function dataProviderForReadonlyError(): Array<unknown> {
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       (source: ArrayView<number>) => view(source, true)
+        .subview('::2', false),
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => view(view(source), true)
         .subview('::2', false),
     ],
     [
