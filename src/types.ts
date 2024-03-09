@@ -8,8 +8,7 @@ export interface ArrayViewInterface<T> {
   /**
    * Proxy for getting and setting values to source array by indexes and slices.
    *
-   * Examples:
-   *
+   * @example
    * ```
    * console.log(view.loc[0]);
    * console.log(view.loc[':']);
