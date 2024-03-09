@@ -223,14 +223,14 @@ function dataProviderForSliceViewLocReadIndexError(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForApplyLengthError(),
+  ...dataProviderForApplyWithLengthError(),
 ] as Array<[
   Array<number>,
   (source: Array<number>) => ArrayView<number>,
   (item: number, index: number) => number,
   Array<number>,
 ]>)(
-  "Array View Apply Length Error Test",
+  "Array View Apply With Length Error Test",
   (
     source: Array<number>,
     viewGetter: (source: Array<number>) => ArrayView<number>,
@@ -254,7 +254,7 @@ describe.each([
   },
 );
 
-function dataProviderForApplyLengthError(): Array<unknown> {
+function dataProviderForApplyWithLengthError(): Array<unknown> {
   return [
     [
       [],
@@ -284,6 +284,66 @@ function dataProviderForApplyLengthError(): Array<unknown> {
       [1, 2, 3],
       (source: Array<number>) => view(source),
       (item: number) => item,
+      [1, 2, 3, 4, 5],
+    ],
+  ];
+}
+
+describe.each([
+  ...dataProviderForWriteLengthError(),
+] as Array<[
+  Array<number>,
+  (source: Array<number>) => ArrayView<number>,
+  Array<number>,
+]>)(
+  "Array View Write Length Error Test",
+  (
+    source: Array<number>,
+    viewGetter: (source: Array<number>) => ArrayView<number>,
+    toWrite: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const v = viewGetter(source);
+
+      try {
+        // When
+        v.loc[':'] = toWrite;
+        expect(true).toBe(false);
+      } catch (e) {
+        // Then
+        expect(e instanceof LengthError).toBe(true);
+        expect((e as IndexError).message).toEqual(`Length of values array not equal to view length (${toWrite.length} != ${source.length}).`);
+      }
+    });
+  },
+);
+
+function dataProviderForWriteLengthError(): Array<unknown> {
+  return [
+    [
+      [],
+      (source: Array<number>) => view(source),
+      [1],
+    ],
+    [
+      [1],
+      (source: Array<number>) => view(source),
+      [],
+    ],
+    [
+      [1],
+      (source: Array<number>) => view(source),
+      [1, 2],
+    ],
+    [
+      [1, 2, 3],
+      (source: Array<number>) => view(source),
+      [1, 2],
+    ],
+    [
+      [1, 2, 3],
+      (source: Array<number>) => view(source),
       [1, 2, 3, 4, 5],
     ],
   ];
