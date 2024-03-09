@@ -10,7 +10,7 @@ describe.each([
     readonlyViewGetter: (view: Array<number>) => ArrayView<number>,
     expected: Array<number>,
   ) => {
-    it("", () => {
+    it("Array View Readonly Write By Index Test", () => {
       // Given
       const v = readonlyViewGetter(source);
 
@@ -22,7 +22,59 @@ describe.each([
         } catch (e) {
           // Then
           expect(e instanceof ReadonlyError).toBe(true);
+          expect((e as ReadonlyError).message).toEqual("Cannot modify a readonly view.");
         }
+      }
+
+      // And then
+      expect([...v]).toEqual(expected);
+    });
+    it("Array View Readonly Write All Test", () => {
+      // Given
+      const v = readonlyViewGetter(source);
+
+      try {
+        // When
+        v.loc[':'] = v.toArray();
+        expect(true).toBe(false);
+      } catch (e) {
+        // Then
+        expect(e instanceof ReadonlyError).toBe(true);
+        expect((e as ReadonlyError).message).toEqual("Cannot modify a readonly view.");
+      }
+
+      // And then
+      expect([...v]).toEqual(expected);
+    });
+    it("Array View Readonly Apply Test", () => {
+      // Given
+      const v = readonlyViewGetter(source);
+
+      try {
+        // When
+        v.apply((x) => x);
+        expect(true).toBe(false);
+      } catch (e) {
+        // Then
+        expect(e instanceof ReadonlyError).toBe(true);
+        expect((e as ReadonlyError).message).toEqual("Cannot modify a readonly view.");
+      }
+
+      // And then
+      expect([...v]).toEqual(expected);
+    });
+    it("Array View Readonly Apply With Test", () => {
+      // Given
+      const v = readonlyViewGetter(source);
+
+      try {
+        // When
+        v.applyWith(v.toArray(), (lhs, rhs) => lhs + rhs);
+        expect(true).toBe(false);
+      } catch (e) {
+        // Then
+        expect(e instanceof ReadonlyError).toBe(true);
+        expect((e as ReadonlyError).message).toEqual("Cannot modify a readonly view.");
       }
 
       // And then
