@@ -33,6 +33,10 @@ export class Slice {
       return false;
     }
 
+    if (!s.match(/^[0-9]*:*[0-9]*:*[0-9]*$/)) {
+      return false;
+    }
+
     const slice = this.parseSliceString(s);
 
     return !(slice.length < 1 || slice.length > 3);
