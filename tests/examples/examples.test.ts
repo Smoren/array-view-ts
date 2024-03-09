@@ -4,7 +4,7 @@ import {
   IndexListSelector,
   MaskSelector,
   SliceSelector,
-} from "../src";
+} from "../../src";
 
 it("First example", () => {
   const input = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
