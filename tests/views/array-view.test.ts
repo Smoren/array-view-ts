@@ -1,9 +1,9 @@
 import { mask, select, slice, view, ArrayView, Slice } from "../../src";
 
 describe.each([
-  ...dataProviderForReadSuccess(),
+  ...dataProviderForRead(),
 ] as Array<[Array<number>]>)(
-  "Array View Read Success Test",
+  "Array View Read Test",
   (
     source: Array<number>,
   ) => {
@@ -27,7 +27,7 @@ describe.each([
   },
 );
 
-function dataProviderForReadSuccess(): Array<unknown> {
+function dataProviderForRead(): Array<unknown> {
   return [
     [[1]],
     [[1, 2]],
@@ -38,9 +38,9 @@ function dataProviderForReadSuccess(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForWriteSuccess(),
+  ...dataProviderForWrite(),
 ] as Array<[Array<number>, Array<number>]>)(
-  "Array View Write Success Test",
+  "Array View Write Test",
   (
     source: Array<number>,
     toWrite: Array<number>,
@@ -67,9 +67,9 @@ describe.each([
 );
 
 describe.each([
-  ...dataProviderForWriteSuccess(),
+  ...dataProviderForWrite(),
 ] as Array<[Array<number>, Array<number>]>)(
-  "Array View Set Success Test",
+  "Array View Set Test",
   (
     source: Array<number>,
     toWrite: Array<number>,
@@ -90,9 +90,9 @@ describe.each([
 );
 
 describe.each([
-  ...dataProviderForWriteSuccess(),
+  ...dataProviderForWrite(),
 ] as Array<[Array<number>, Array<number>]>)(
-  "Array View Set Loc Success Test",
+  "Array View Set Loc Test",
   (
     source: Array<number>,
     toWrite: Array<number>,
@@ -112,7 +112,7 @@ describe.each([
   },
 );
 
-function dataProviderForWriteSuccess(): Array<unknown> {
+function dataProviderForWrite(): Array<unknown> {
   return [
     [[1], [0]],
     [[1, 2], [3, 5]],
@@ -121,9 +121,9 @@ function dataProviderForWriteSuccess(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForIncrementSuccess(),
+  ...dataProviderForIncrement(),
 ] as Array<[Array<number>, Array<number>]>)(
-  "Array View Increment Success Test",
+  "Array View Increment Test",
   (
     source: Array<number>,
     expected: Array<number>,
@@ -149,7 +149,7 @@ describe.each([
   },
 );
 
-function dataProviderForIncrementSuccess(): Array<unknown> {
+function dataProviderForIncrement(): Array<unknown> {
   return [
     [[1], [2]],
     [[1, 2], [2, 3]],
@@ -158,9 +158,9 @@ function dataProviderForIncrementSuccess(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForCombineReadSuccess(),
+  ...dataProviderForCombineRead(),
 ] as Array<[Array<number>, (source: Array<number>) => ArrayView<number>, Array<number>]>)(
-  "Array View Combine Read Success Test",
+  "Array View Combine Read Test",
   (
     source: Array<number>,
     viewGetter: (source: Array<number>) => ArrayView<number>,
@@ -176,7 +176,7 @@ describe.each([
   },
 );
 
-function dataProviderForCombineReadSuccess(): Array<unknown> {
+function dataProviderForCombineRead(): Array<unknown> {
   return [
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -255,9 +255,9 @@ function dataProviderForCombineReadSuccess(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForCombineWriteSuccess(),
+  ...dataProviderForCombineWrite(),
 ] as Array<[Array<number>, (source: Array<number>) => ArrayView<number>, Array<number>, Array<number>]>)(
-  "Array View Combine Write Success Test",
+  "Array View Combine Write Test",
   (
     source: Array<number>,
     viewGetter: (source: Array<number>) => ArrayView<number>,
@@ -278,9 +278,9 @@ describe.each([
 );
 
 describe.each([
-  ...dataProviderForCombineWriteSuccess(),
+  ...dataProviderForCombineWrite(),
 ] as Array<[Array<number>, (source: Array<number>) => ArrayView<number>, Array<number>, Array<number>]>)(
-  "Array View Combine Write Slice Success Test",
+  "Array View Combine Write Slice Test",
   (
     source: Array<number>,
     viewGetter: (source: Array<number>) => ArrayView<number>,
@@ -300,7 +300,7 @@ describe.each([
   },
 );
 
-function dataProviderForCombineWriteSuccess(): Array<unknown> {
+function dataProviderForCombineWrite(): Array<unknown> {
   return [
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -388,14 +388,14 @@ function dataProviderForCombineWriteSuccess(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForApplySuccess(),
+  ...dataProviderForApply(),
 ] as Array<[
   Array<number>,
   (source: Array<number>) => ArrayView<number>,
   (item: number, index: number) => number,
   Array<number>,
 ]>)(
-  "Array View Apply Success Test",
+  "Array View Apply Test",
   (
     source: Array<number>,
     viewGetter: (source: Array<number>) => ArrayView<number>,
@@ -415,7 +415,7 @@ describe.each([
   },
 );
 
-function dataProviderForApplySuccess(): Array<unknown> {
+function dataProviderForApply(): Array<unknown> {
   return [
     [
       [],
@@ -473,7 +473,7 @@ function dataProviderForApplySuccess(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForApplyWithSuccess(),
+  ...dataProviderForApplyWith(),
 ] as Array<[
   Array<number>,
   (source: Array<number>) => ArrayView<number>,
@@ -481,7 +481,7 @@ describe.each([
   Array<number>,
   Array<number>,
 ]>)(
-  "Array View Apply With Success Test",
+  "Array View Apply With Test",
   (
     source: Array<number>,
     viewGetter: (source: Array<number>) => ArrayView<number>,
@@ -502,7 +502,7 @@ describe.each([
   },
 );
 
-function dataProviderForApplyWithSuccess(): Array<unknown> {
+function dataProviderForApplyWith(): Array<unknown> {
   return [
     [
       [],
