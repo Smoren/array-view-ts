@@ -69,7 +69,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     return [...this];
   }
 
-  public filter(predicate: (value: T) => boolean): ArrayCompressView<T> {
+  public filter(predicate: (value: T) => boolean): ArrayMaskView<T> {
     return this.is(predicate).select(this);
   }
 
@@ -166,7 +166,7 @@ export class ArrayIndexListView<T> extends ArrayView<T> {
   }
 }
 
-export class ArrayCompressView<T> extends ArrayIndexListView<T> {
+export class ArrayMaskView<T> extends ArrayIndexListView<T> {
   public readonly mask: boolean[];
 
   constructor(

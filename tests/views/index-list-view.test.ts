@@ -1,4 +1,4 @@
-import { select, view } from "../../src/functions";
+import { select, view } from "../../src";
 
 describe.each([
   ...dataProviderForIndexListSubviewReadSuccess(),

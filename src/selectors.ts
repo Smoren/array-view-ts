@@ -1,4 +1,4 @@
-import { ArrayCompressView, ArrayIndexListView, ArraySliceView, ArrayView } from "./views";
+import { ArrayMaskView, ArrayIndexListView, ArraySliceView, ArrayView } from "./views";
 import { Slice } from "./structs";
 import { ArraySelectorInterface } from "./types";
 
@@ -17,8 +17,8 @@ export class IndexListSelector implements ArraySelectorInterface {
 export class MaskSelector implements ArraySelectorInterface {
   public readonly value: Array<boolean>;
 
-  public select<T>(source: ArrayView<T>): ArrayCompressView<T> {
-    return new ArrayCompressView<T>(source, { mask: this.value, readonly: source.readonly });
+  public select<T>(source: ArrayView<T>): ArrayMaskView<T> {
+    return new ArrayMaskView<T>(source, { mask: this.value, readonly: source.readonly });
   }
 
   constructor(value: Array<boolean> | ArrayView<boolean>) {

@@ -1,4 +1,4 @@
-import { mask, view } from "../../src/functions";
+import { mask, view } from "../../src";
 
 describe.each([
   ...dataProviderForMaskSubviewReadSuccess(),

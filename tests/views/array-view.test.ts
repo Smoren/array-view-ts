@@ -1,6 +1,4 @@
-import { mask, select, slice, view } from "../../src/functions";
-import { ArrayView } from "../../src/views";
-import { Slice } from "../../src/structs";
+import { mask, select, slice, view, ArrayView, Slice } from "../../src";
 
 describe.each([
   ...dataProviderForReadSuccess(),
