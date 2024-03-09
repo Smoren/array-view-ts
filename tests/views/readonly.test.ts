@@ -92,6 +92,11 @@ function dataProviderForReadonly(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => view(view(source, true), true),
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       (source: ArrayView<number>) => view(source, true)
         .subview('::2'),
       [1, 3, 5, 7, 9],
@@ -171,6 +176,12 @@ function dataProviderForReadonlySubview(): Array<unknown> {
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       (source: ArrayView<number>) => view(source)
+        .subview('::2', true),
+      [1, 3, 5, 7, 9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => (new ArrayView(new ArrayView(source)))
         .subview('::2', true),
       [1, 3, 5, 7, 9],
     ],
