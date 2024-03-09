@@ -32,9 +32,7 @@
     "es",
     "lib",
     "src",
-    "tests/examples",
-    "tests/fixture.ts",
-    "tests/tools"
+    "tests/examples"
   ],
   "keywords": [
     "collection",
