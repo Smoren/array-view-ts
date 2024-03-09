@@ -1,5 +1,5 @@
-import { normalizeIndex } from "../src/utils";
-import { IndexError } from "../src";
+import { normalizeIndex } from "../../src/utils";
+import { IndexError } from "../../src";
 
 describe.each([
   ...dataProviderForSuccess(),
