@@ -31,6 +31,10 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
           return target.length;
         }
 
+        if (typeof (prop as unknown) === "symbol") {
+          throw new KeyError(`Invalid key: "${String(prop)}".`);
+        }
+
         if (typeof prop === "string" && Slice.isSliceString(prop)) {
           return this.subview(new SliceSelector(prop)).toArray();
         }
@@ -44,6 +48,10 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
       set: (target, prop, value) => {
         if (this.readonly) {
           throw new ReadonlyError('Cannot modify a readonly view.');
+        }
+
+        if (typeof (prop as unknown) === "symbol") {
+          throw new KeyError(`Invalid key: "${String(prop)}".`);
         }
 
         if (typeof prop === "string" && Slice.isSliceString(prop)) {
