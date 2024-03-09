@@ -1,4 +1,15 @@
-import { mask, select, slice, view, ArrayView, Slice } from "../../src";
+import {
+  mask,
+  select,
+  slice,
+  view,
+  ArrayView,
+  ArrayIndexListView,
+  ArrayMaskView,
+  ArraySliceView,
+  SliceSelector,
+  Slice,
+} from "../../src";
 
 describe.each([
   ...dataProviderForRead(),
@@ -183,6 +194,24 @@ function dataProviderForCombineRead(): Array<unknown> {
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       (source: Array<number>) => view(source)
+        .subview('::2'),
+      [1, 3, 5, 7, 9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayIndexListView(source, { indexes: [...source.keys()] })
+        .subview('::2'),
+      [1, 3, 5, 7, 9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArrayMaskView(source, { mask: [true, true, true, true, true, true, true, true, true, true] })
+        .subview('::2'),
+      [1, 3, 5, 7, 9],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => new ArraySliceView(source, { slice: new SliceSelector("::1") })
         .subview('::2'),
       [1, 3, 5, 7, 9],
     ],
