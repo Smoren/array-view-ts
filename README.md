@@ -4,7 +4,7 @@
 ![Build and test](https://github.com/Smoren/array-view-ts/actions/workflows/test_master.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Array View TS is a TypeScript library that provides a powerful set of utility classes for working with arrays in
+**Array View** is a TypeScript library that provides a powerful set of utility classes for working with arrays in
 a versatile and efficient manner. These classes enable developers to create views of arrays, manipulate data with ease,
 and select specific elements using index lists, masks, and slice parameters.
 
@@ -20,7 +20,7 @@ Array View offers a Python-like slicing experience for efficient data manipulati
 You can install Array View TS using npm:
 
 ```bash
-npm install array-view-ts
+npm install array-view
 ```
 
 ## Quick examples
