@@ -10,20 +10,30 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
   protected readonly source: Array<T>;
   protected readonly parentView?: ArrayView<T>;
 
-  public static toView<T>(source: Array<T> | ArrayView<T>): ArrayView<T> {
-    return source instanceof ArrayView
-      ? source
-      : new ArrayView(source);
+  public static toView<T>(source: Array<T> | ArrayView<T>, readonly?: boolean): ArrayView<T> {
+    if (!(source instanceof ArrayView)) {
+      return new ArrayView(source, { readonly });
+    }
+
+    if (source.readonly && !readonly) {
+      throw new ReadonlyError("Cannot create not readonly view for readonly source.");
+    }
+
+    if (!source.readonly && readonly) {
+      return new ArrayView(source, { readonly });
+    }
+
+    return source;
   }
 
   constructor(
     source: Array<T> | ArrayView<T>,
-    { readonly = false }: { readonly?: boolean } = {},
+    { readonly }: { readonly?: boolean } = {},
   ) {
     const loc = (source instanceof ArrayView) ? source.loc : source;
     this.source = (source instanceof ArrayView) ? source.source : source;
     this.parentView = (source instanceof ArrayView) ? source : undefined;
-    this.readonly = readonly;
+    this.readonly = readonly ?? ((source instanceof ArrayView) ? (source as ArrayView<T>).readonly : false);
 
     this.loc = new Proxy<Array<T>>(loc, {
       get: (target, prop) => {
@@ -35,7 +45,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
           throw new KeyError(`Invalid key: "${String(prop)}".`);
         }
 
-        if (typeof prop === "string" && Slice.isSliceString(prop)) {
+        if (typeof prop === "string" && Slice.isSlice(prop)) {
           return this.subview(new SliceSelector(prop)).toArray();
         }
 
@@ -54,7 +64,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
           throw new KeyError(`Invalid key: "${String(prop)}".`);
         }
 
-        if (typeof prop === "string" && Slice.isSliceString(prop)) {
+        if (typeof prop === "string" && Slice.isSlice(prop)) {
           this.subview(new SliceSelector(prop)).set(value);
           return true;
         }
@@ -85,10 +95,10 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     return new MaskSelector(this.toArray().map(predicate));
   }
 
-  public subview(selector: ArraySelectorInterface | string): ArrayViewInterface<T> {
+  public subview(selector: ArraySelectorInterface | string, readonly?: boolean): ArrayViewInterface<T> {
     return (typeof selector === 'string')
-      ? (new SliceSelector(selector).select(this))
-      : selector.select(this);
+      ? (new SliceSelector(selector).select(this, readonly))
+      : selector.select(this, readonly);
   }
 
   public apply(mapper: (item: T, index: number) => T): ArrayView<T> {
@@ -145,7 +155,7 @@ export class ArrayIndexListView<T> extends ArrayView<T> {
     source: Array<T> | ArrayView<T>,
     {
       indexes,
-      readonly = false,
+      readonly,
     }: {
       indexes: number[],
       readonly?: boolean,
@@ -181,7 +191,7 @@ export class ArrayMaskView<T> extends ArrayIndexListView<T> {
     source: Array<T> | ArrayView<T>,
     {
       mask,
-      readonly = false,
+      readonly,
     }: {
       mask: boolean[],
       readonly?: boolean,
@@ -208,7 +218,7 @@ export class ArraySliceView<T> extends ArrayView<T> {
     source: Array<T> | ArrayView<T>,
     {
       slice,
-      readonly = false,
+      readonly,
     }: {
       slice: Slice,
       readonly?: boolean,
