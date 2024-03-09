@@ -9,7 +9,7 @@ export interface ArrayViewInterface<T> {
 
   is(predicate: (value: T) => boolean): ArraySelectorInterface;
 
-  subview(selector: ArraySelectorInterface | string): ArrayViewInterface<T>;
+  subview(selector: ArraySelectorInterface | string, readonly?: boolean): ArrayViewInterface<T>;
 
   apply(mapper: (item: T, index: number) => T): void;
 
@@ -21,7 +21,7 @@ export interface ArrayViewInterface<T> {
 }
 
 export interface ArraySelectorInterface {
-  select<T>(source: ArrayViewInterface<T>): ArrayViewInterface<T>;
+  select<T>(source: ArrayViewInterface<T>, readonly?: boolean): ArrayViewInterface<T>;
 }
 
 export type SliceableArray<T> = Array<T> & {

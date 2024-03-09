@@ -1,4 +1,4 @@
-import { view, mask, slice, IndexError, KeyError, LengthError, ArrayView, select } from "../../src";
+import { view, mask, slice, IndexError, KeyError, LengthError, ArrayView } from "../../src";
 
 describe.each([
   ...dataProviderForIndexError(),

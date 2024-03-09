@@ -2,8 +2,8 @@ import { ArrayView } from "./views";
 import { Slice } from "./structs";
 import { IndexListSelector, MaskSelector, SliceSelector } from "./selectors";
 
-export function view<T>(source: Array<T> | ArrayView<T>): ArrayView<T> {
-  return ArrayView.toView(source);
+export function view<T>(source: Array<T> | ArrayView<T>, readonly?: boolean): ArrayView<T> {
+  return ArrayView.toView(source, readonly);
 }
 
 export function slice(slice: string | Slice): SliceSelector {
