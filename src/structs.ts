@@ -33,7 +33,7 @@ export class Slice {
       return false;
     }
 
-    if (!s.match(/^[0-9]*:*[0-9]*:*[0-9]*$/)) {
+    if (!s.match(/^-?[0-9]*:?-?[0-9]*:?-?[0-9]*$/)) {
       return false;
     }
 
