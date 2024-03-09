@@ -12,7 +12,7 @@ export class Slice {
     }
 
     if (!this.isSliceString(s)) {
-      throw new ValueError(`Invalid slice: "${s}".`);
+      throw new ValueError(`Invalid slice: "${String(s)}".`);
     }
 
     const slice = this.parseSliceString(s);
