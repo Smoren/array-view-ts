@@ -1,15 +1,10 @@
 import { expect } from "@jest/globals";
 import {
   ArrayView,
-  ArrayIndexListView,
-  ArrayCompressView,
-  ArraySliceView,
-} from "../src/views";
-import {
   IndexListSelector,
-  MaskSelector, SliceSelector,
-} from "../src/selectors";
-import { Slice } from "../src/structs";
+  MaskSelector,
+  SliceSelector,
+} from "../src";
 
 it("First example", () => {
   const input = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
