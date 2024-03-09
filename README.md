@@ -15,7 +15,7 @@ Array View offers a Python-like slicing experience for efficient data manipulati
 
 ## Features
 - Create array views for easy data manipulation.
-- Select elements using Python-like slice notation.
+- Select elements using [Python-like slice notation](https://www.geeksforgeeks.org/python-list-slicing/).
 - Handle array slicing operations with ease.
 - Enable efficient selection of elements using index lists and boolean masks.
 
