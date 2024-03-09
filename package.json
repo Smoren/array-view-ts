@@ -35,12 +35,14 @@
     "tests/examples"
   ],
   "keywords": [
-    "collection",
+    "array-view",
+    "array-viewer",
     "view",
     "slice",
     "array",
     "array-view",
     "selector",
+    "collection",
     "python-like"
   ],
   "devDependencies": {
