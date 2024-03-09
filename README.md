@@ -1,10 +1,13 @@
 # Array View for TypeScript and JavaScript
 
+[![npm](https://img.shields.io/npm/v/array-view.svg)](https://www.npmjs.com/package/array-view)
+[![npm](https://img.shields.io/npm/dm/array-view.svg?style=flat)](https://www.npmjs.com/package/array-view)
 [![Coverage Status](https://coveralls.io/repos/github/Smoren/array-view-ts/badge.svg?branch=master&rand=123)](https://coveralls.io/github/Smoren/array-view-ts?branch=master)
 ![Build and test](https://github.com/Smoren/array-view-ts/actions/workflows/test.yml/badge.svg)
+[![Minified Size](https://badgen.net/bundlephobia/minzip/array-view)](https://bundlephobia.com/result?p=array-view)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**Array View** is a TypeScript library that provides a powerful set of utility classes for working with arrays in
+**Array View** is a TypeScript library that provides a powerful set of utilities for working with arrays in
 a versatile and efficient manner. These classes enable developers to create views of arrays, manipulate data with ease,
 and select specific elements using index lists, masks, and slice parameters.
 
