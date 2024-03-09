@@ -20,8 +20,6 @@ Array View offers a Python-like slicing experience for efficient data manipulati
 - Enable efficient selection of elements using index lists and boolean masks.
 
 ## Installation
-You can install Array View TS using npm:
-
 ```bash
 npm install array-view
 ```
