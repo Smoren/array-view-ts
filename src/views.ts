@@ -15,10 +15,6 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
       return new ArrayView(source, { readonly });
     }
 
-    if (source.readonly && !readonly) {
-      throw new ReadonlyError("Cannot create not readonly view for readonly source.");
-    }
-
     if (!source.readonly && readonly) {
       return new ArrayView(source, { readonly });
     }
@@ -34,6 +30,10 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     this.source = (source instanceof ArrayView) ? source.source : source;
     this.parentView = (source instanceof ArrayView) ? source : undefined;
     this.readonly = readonly ?? ((source instanceof ArrayView) ? (source as ArrayView<T>).readonly : false);
+
+    if ((source instanceof ArrayView) && source.readonly && !this.readonly) {
+      throw new ReadonlyError("Cannot create non-readonly view for readonly source.");
+    }
 
     this.loc = new Proxy<Array<T>>(loc, {
       get: (target, prop) => {

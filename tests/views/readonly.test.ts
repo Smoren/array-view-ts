@@ -243,3 +243,80 @@ function dataProviderForReadonlySubview(): Array<unknown> {
     ],
   ];
 }
+
+describe.each([
+  ...dataProviderForReadonlyError(),
+] as Array<[Array<number>, (view: Array<number>) => ArrayView<number>]>)(
+  "Array View Readonly Error Test",
+  (
+    source: Array<number>,
+    readonlyViewGetter: (view: Array<number>) => ArrayView<number>,
+  ) => {
+    it("", () => {
+      // Given
+      try {
+        // When
+        readonlyViewGetter(source);
+        expect(true).toBe(false);
+      } catch (e) {
+        // Then
+        expect(e instanceof ReadonlyError).toBe(true);
+        expect((e as ReadonlyError).message).toEqual("Cannot create non-readonly view for readonly source.");
+      }
+    });
+  },
+);
+
+function dataProviderForReadonlyError(): Array<unknown> {
+  return [
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => view(source, true)
+        .subview('::2', false),
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => view(source, true)
+        .subview('::2')
+        .subview(mask([true, false, true, false, true]), false),
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => view(source)
+        .subview('::2', true)
+        .subview(mask([true, false, true, false, true]))
+        .subview(select([0, 2]), false),
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => view(source, true)
+        .subview('::2', false)
+        .subview(mask([true, false, true, false, true]))
+        .subview(select([0, 2]))
+        .subview('1:'),
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => view(source, false)
+        .subview(mask([true, false, true, false, true, false, true, false, true, false]))
+        .subview(mask([true, false, true, false, true]), true)
+        .subview(mask([true, false, true]), false)
+        .subview(mask([false, true])),
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => view(source, true)
+        .subview('::2', false)
+        .subview('::2')
+        .subview('::2'),
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: ArrayView<number>) => view(source, false)
+        .subview('::2', true)
+        .subview('::2', false)
+        .subview('::2', true)
+        .subview('1:', false),
+    ],
+  ];
+}
