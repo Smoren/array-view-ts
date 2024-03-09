@@ -1,4 +1,4 @@
-import { view, IndexError, KeyError } from "../../src";
+import { view, mask, IndexError, KeyError, LengthError } from "../../src";
 
 describe.each([
   ...dataProviderForIndexError(),
@@ -132,5 +132,44 @@ function dataProviderForKeyError(): Array<unknown> {
     [[1, 2, 3], ['a', 'b', 'c']],
     [[1, 2, 3], ['1a', 'test', '!']],
     [[1, 2, 3], [Symbol(''), Symbol('test')]],
+  ];
+}
+
+describe.each([
+  ...dataProviderForMaskViewReadLengthError(),
+] as Array<[Array<number>, Array<boolean>]>)(
+  "Mask View Read Length Error",
+  (
+    source: Array<number>,
+    boolMask: Array<boolean>,
+  ) => {
+    it("", () => {
+      // Given
+      const v = view(source);
+
+      try {
+        // When
+        v.subview(mask(boolMask));
+        expect(true).toBe(false);
+      } catch (e) {
+        // Then
+        expect(e instanceof LengthError).toBe(true);
+        expect((e as LengthError).message).toEqual(`Mask length not equal to source length (${boolMask.length} != ${source.length}).`);
+      }
+    });
+  },
+);
+
+function dataProviderForMaskViewReadLengthError(): Array<unknown> {
+  return [
+    [[], [1]],
+    [[1], []],
+    [[1], [1, 0]],
+    [[1, 2, 3], [1]],
+    [[1, 2, 3], [0]],
+    [[1, 2, 3], [0, 1]],
+    [[1, 2, 3], [0, 1, 1, 0]],
+    [[1, 2, 3], [1, 1, 1, 1, 1]],
+    [[1, 2, 3], [0, 0, 0, 0, 0]],
   ];
 }
