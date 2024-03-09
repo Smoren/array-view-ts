@@ -1,4 +1,4 @@
-import { view, mask, slice, IndexError, KeyError, LengthError } from "../../src";
+import { view, mask, slice, IndexError, KeyError, LengthError, ArrayView, select } from "../../src";
 
 describe.each([
   ...dataProviderForIndexError(),
@@ -219,5 +219,72 @@ function dataProviderForSliceViewLocReadIndexError(): Array<unknown> {
     [[1, 2, 3], '0::0'],
     [[1, 2, 3], ':-1:0'],
     [[1, 2, 3], '1:-1:0'],
+  ];
+}
+
+describe.each([
+  ...dataProviderForApplyLengthError(),
+] as Array<[
+  Array<number>,
+  (source: Array<number>) => ArrayView<number>,
+  (item: number, index: number) => number,
+  Array<number>,
+]>)(
+  "Array View Apply Length Error Test",
+  (
+    source: Array<number>,
+    viewGetter: (source: Array<number>) => ArrayView<number>,
+    mapper: (item: number, index: number) => number,
+    toApplyWith: Array<number>,
+  ) => {
+    it("", () => {
+      // Given
+      const v = viewGetter(source);
+
+      try {
+        // When
+        v.applyWith(toApplyWith, mapper);
+        expect(true).toBe(false);
+      } catch (e) {
+        // Then
+        expect(e instanceof LengthError).toBe(true);
+        expect((e as IndexError).message).toEqual(`Length of values array not equal to view length (${toApplyWith.length} != ${source.length}).`);
+      }
+    });
+  },
+);
+
+function dataProviderForApplyLengthError(): Array<unknown> {
+  return [
+    [
+      [],
+      (source: Array<number>) => view(source),
+      (item: number) => item,
+      [1],
+    ],
+    [
+      [1],
+      (source: Array<number>) => view(source),
+      (item: number) => item,
+      [],
+    ],
+    [
+      [1],
+      (source: Array<number>) => view(source),
+      (item: number) => item,
+      [1, 2],
+    ],
+    [
+      [1, 2, 3],
+      (source: Array<number>) => view(source),
+      (item: number) => item,
+      [1, 2],
+    ],
+    [
+      [1, 2, 3],
+      (source: Array<number>) => view(source),
+      (item: number) => item,
+      [1, 2, 3, 4, 5],
+    ],
   ];
 }
