@@ -1,4 +1,4 @@
-import { view, mask, IndexError, KeyError, LengthError } from "../../src";
+import { view, mask, slice, IndexError, KeyError, LengthError } from "../../src";
 
 describe.each([
   ...dataProviderForIndexError(),
@@ -138,7 +138,7 @@ function dataProviderForKeyError(): Array<unknown> {
 describe.each([
   ...dataProviderForMaskViewReadLengthError(),
 ] as Array<[Array<number>, Array<boolean>]>)(
-  "Mask View Read Length Error",
+  "Mask View Read Length Error Test",
   (
     source: Array<number>,
     boolMask: Array<boolean>,
@@ -171,5 +171,53 @@ function dataProviderForMaskViewReadLengthError(): Array<unknown> {
     [[1, 2, 3], [0, 1, 1, 0]],
     [[1, 2, 3], [1, 1, 1, 1, 1]],
     [[1, 2, 3], [0, 0, 0, 0, 0]],
+  ];
+}
+
+describe.each([
+  ...dataProviderForSliceViewLocReadIndexError(),
+] as Array<[Array<number>, string, Array<number>]>)(
+  "Slice View Loc Read Index Error Test",
+  (
+    source: Array<number>,
+    config: string,
+  ) => {
+    it("", () => {
+      // Given
+      const v = view(source);
+
+      try {
+        // When
+        v.subview(slice(config));
+        expect(true).toBe(false);
+      } catch (e) {
+        // Then
+        expect(e instanceof IndexError).toBe(true);
+        expect((e as IndexError).message).toEqual("Step cannot be 0.");
+      }
+    });
+  },
+);
+
+function dataProviderForSliceViewLocReadIndexError(): Array<unknown> {
+  return [
+    [[], '::0'],
+    [[], '0:0:0'],
+    [[], '0:1:0'],
+    [[], '0::0'],
+    [[], ':-1:0'],
+    [[], '1:-1:0'],
+    [[1], '::0'],
+    [[1], '0:0:0'],
+    [[1], '0:1:0'],
+    [[1], '0::0'],
+    [[1], ':-1:0'],
+    [[1], '1:-1:0'],
+    [[1, 2, 3], '::0'],
+    [[1, 2, 3], '0:0:0'],
+    [[1, 2, 3], '0:1:0'],
+    [[1, 2, 3], '0::0'],
+    [[1, 2, 3], ':-1:0'],
+    [[1, 2, 3], '1:-1:0'],
   ];
 }
