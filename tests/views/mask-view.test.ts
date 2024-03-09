@@ -1,9 +1,9 @@
 import { mask, view } from "../../src";
 
 describe.each([
-  ...dataProviderForMaskSubviewReadSuccess(),
+  ...dataProviderForMaskSubviewRead(),
 ] as Array<[Array<number>, Array<boolean>, Array<number>]>)(
-  "Array View Mask Subview Read Success Test",
+  "Array View Mask Subview Read Test",
   (
     source: Array<number>,
     boolMask: Array<boolean>,
@@ -35,7 +35,7 @@ describe.each([
   },
 );
 
-function dataProviderForMaskSubviewReadSuccess(): Array<unknown> {
+function dataProviderForMaskSubviewRead(): Array<unknown> {
   return [
     [[], [], []],
     [[1], [0], []],
@@ -50,9 +50,9 @@ function dataProviderForMaskSubviewReadSuccess(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForMaskSubviewUpdateSuccess(),
+  ...dataProviderForMaskSubviewUpdate(),
 ] as Array<[Array<number>, Array<boolean>, Array<number>, Array<number>]>)(
-  "Array View Mask Subview Update Success Test",
+  "Array View Mask Subview Update Test",
   (
     source: Array<number>,
     boolMask: Array<boolean>,
@@ -82,7 +82,7 @@ describe.each([
   },
 );
 
-function dataProviderForMaskSubviewUpdateSuccess(): Array<unknown> {
+function dataProviderForMaskSubviewUpdate(): Array<unknown> {
   return [
     [
       [],

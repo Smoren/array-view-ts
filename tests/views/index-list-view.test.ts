@@ -1,9 +1,9 @@
 import { select, view } from "../../src";
 
 describe.each([
-  ...dataProviderForIndexListSubviewReadSuccess(),
+  ...dataProviderForIndexListSubviewRead(),
 ] as Array<[Array<number>, Array<number>, Array<number>]>)(
-  "Array View Index List Subview Read Success Test",
+  "Array View Index List Subview Read Test",
   (
     source: Array<number>,
     indexes: Array<number>,
@@ -35,7 +35,7 @@ describe.each([
   },
 );
 
-function dataProviderForIndexListSubviewReadSuccess(): Array<unknown> {
+function dataProviderForIndexListSubviewRead(): Array<unknown> {
   return [
     [[], [], []],
     [[1], [], []],
@@ -55,9 +55,9 @@ function dataProviderForIndexListSubviewReadSuccess(): Array<unknown> {
 }
 
 describe.each([
-  ...dataProviderForIndexListSubviewUpdateSuccess(),
+  ...dataProviderForIndexListSubviewUpdate(),
 ] as Array<[Array<number>, Array<number>, Array<number>, Array<number>]>)(
-  "Array View Index List Subview Update Success Test",
+  "Array View Index List Subview Update Test",
   (
     source: Array<number>,
     indexes: Array<number>,
@@ -87,7 +87,7 @@ describe.each([
   },
 );
 
-function dataProviderForIndexListSubviewUpdateSuccess(): Array<unknown> {
+function dataProviderForIndexListSubviewUpdate(): Array<unknown> {
   return [
     [
       [],
