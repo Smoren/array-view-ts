@@ -21,19 +21,23 @@ export class Slice {
   /**
    * Converts a slice string or Slice object into a Slice instance.
    *
-   * @param {string | Slice} s - The slice string or Slice object to convert.
+   * @param {string | Array<number | undefined> | Slice} s - The slice string/array or Slice object to convert.
    * @returns {Slice} The converted Slice instance.
    */
-  public static toSlice(s: string | Slice): Slice {
+  public static toSlice(s: string | Array<number | undefined> | Slice): Slice {
     if (s instanceof Slice) {
       return s;
+    }
+
+    if (Array.isArray(s) && this.isSliceArray(s)) {
+      return new Slice(...(s as Array<number | undefined>));
     }
 
     if (!this.isSliceString(s)) {
       throw new ValueError(`Invalid slice: "${String(s)}".`);
     }
 
-    const slice = this.parseSliceString(s);
+    const slice = this.parseSliceString(s as string);
 
     return new Slice(...slice);
   }
@@ -71,7 +75,32 @@ export class Slice {
 
     const slice = this.parseSliceString(s);
 
-    return !(slice.length < 1 || slice.length > 3);
+    return slice.length >= 1 && slice.length <= 3;
+  }
+
+  /**
+   * Checks if the provided value is a valid slice array.
+   *
+   * @param {unknown} s - The value to check.
+   *
+   * @returns {boolean} True if the value is a valid slice array, false otherwise.
+   */
+  public static isSliceArray(s: unknown): boolean {
+    if (!Array.isArray(s)) {
+      return false;
+    }
+
+    if(!(s.length >= 0 && s.length <= 3)) {
+      return false;
+    }
+
+    for (const item of s) {
+      if (item !== undefined && !Number.isInteger(item)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**
