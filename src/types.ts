@@ -91,11 +91,11 @@ export interface ArrayViewInterface<T> {
   /**
    * Sets new values for the elements in the view.
    *
-   * @param {Array<T> | ArrayViewInterface<T>} newValues - The new values to set.
+   * @param {Array<T> | ArrayViewInterface<T> | T} newValue - The new values to set.
    *
    * @returns {ArrayViewInterface<T>} this view.
    */
-  set(newValues: Array<T> | ArrayViewInterface<T>): ArrayViewInterface<T>;
+  set(newValue: Array<T> | ArrayViewInterface<T> | T): ArrayViewInterface<T>;
 
   /**
    * Returns an iterator for the elements in the view.
@@ -128,5 +128,5 @@ export interface ArraySelectorInterface {
  * @template T - The type of elements in the array.
  */
 export type SliceableArray<T> = Array<T> & {
-  [index: string]: Array<T>
+  [index: string]: Array<T>;
 }

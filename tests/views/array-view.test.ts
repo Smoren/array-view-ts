@@ -316,7 +316,7 @@ describe.each([
   (
     source: Array<number>,
     viewGetter: (source: Array<number>) => ArrayView<number>,
-    toWrite: Array<number>,
+    toWrite: Array<number> | number,
     expected: Array<number>,
   ) => {
     it("", () => {
@@ -339,7 +339,7 @@ describe.each([
   (
     source: Array<number>,
     viewGetter: (source: Array<number>) => ArrayView<number>,
-    toWrite: Array<number>,
+    toWrite: Array<number> | number,
     expected: Array<number>,
   ) => {
     it("", () => {
@@ -347,6 +347,7 @@ describe.each([
       const v = viewGetter(source);
 
       // When
+      // @ts-ignore
       v.loc[':'] = toWrite;
 
       // Then
@@ -438,6 +439,15 @@ function dataProviderForCombineWrite(): Array<unknown> {
         .subview('::2'),
       [11, 99],
       [11, 2, 3, 4, 5, 6, 7, 8, 99, 10],
+    ],
+    [
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      (source: Array<number>) => view(source)
+        .subview(slice(new Slice(undefined, undefined, 2)))
+        .subview(slice('::2'))
+        .subview('::2'),
+      111,
+      [111, 2, 3, 4, 5, 6, 7, 8, 111, 10],
     ],
   ];
 }

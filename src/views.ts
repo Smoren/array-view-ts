@@ -1,5 +1,5 @@
 import { MaskSelector, SliceSelector } from "./selectors";
-import { normalizeIndex } from "./utils";
+import { isCountable, normalizeIndex } from "./utils";
 import { KeyError, LengthError, ReadonlyError } from "./excpetions";
 import { NormalizedSlice, Slice } from "./structs";
 import type { ArrayViewInterface, ArraySelectorInterface, SliceableArray } from "./types";
@@ -57,7 +57,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
   /**
    * Constructs a new ArrayView instance based on the provided source array or ArrayView.
    *
-   * @param {Array<T> | ArrayView<T>} source - The source array or ArrayView to create a view from.
+   * @param {Array<T> | ArrayViewInterface<T>} source - The source array or ArrayView to create a view from.
    * @param {object} options - Options for configuring the view.
    * @param {boolean} [options.readonly=false] - Optional flag to indicate whether the view should be readonly.
    *
@@ -70,7 +70,7 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
     const loc = Array.isArray(source) ? source : source.loc;
     this.source = Array.isArray(source) ? source : source.source;
     this.parentView = Array.isArray(source) ? undefined : source;
-    this.readonly = readonly ?? ((source instanceof ArrayView) ? (source as ArrayView<T>).readonly : false);
+    this.readonly = readonly ?? (Array.isArray(source) ? false : (source as ArrayViewInterface<T>).readonly);
 
     if ((source instanceof ArrayView) && source.readonly && !this.readonly) {
       throw new ReadonlyError("Cannot create non-readonly view for readonly source.");
@@ -156,7 +156,10 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
   }
 
   /** @inheritDoc */
-  public applyWith<U>(data: Array<U> | ArrayView<U>, mapper: (lhs: T, rhs: U, index: number) => T): ArrayView<T> {
+  public applyWith<U>(
+    data: Array<U> | ArrayViewInterface<U>,
+    mapper: (lhs: T, rhs: U, index: number) => T,
+  ): ArrayView<T> {
     if (data.length !== this.length) {
       throw new LengthError(`Length of values array not equal to view length (${data.length} != ${this.length}).`);
     }
@@ -171,7 +174,16 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
   }
 
   /** @inheritDoc */
-  public set(newValues: Array<T> | ArrayView<T>): ArrayView<T> {
+  public set(newValue: Array<T> | ArrayViewInterface<T> | T): ArrayView<T> {
+    if (!isCountable(newValue)) {
+      for (let i = 0; i < this.length; ++i) {
+        this.loc[i] = newValue as T;
+      }
+      return this;
+    }
+
+    const newValues = newValue as Array<T> | ArrayViewInterface<T>;
+
     if (newValues.length !== this.length) {
       throw new LengthError(`Length of values array not equal to view length (${newValues.length} != ${this.length}).`);
     }
@@ -236,7 +248,7 @@ export class ArrayIndexListView<T> extends ArrayView<T> {
   /**
    * Constructs a new ArrayIndexListView instance with the specified source array or ArrayView and indexes array.
    *
-   * @param {Array<T> | ArrayView<T>} source - The source array or ArrayView to create a view from.
+   * @param {Array<T> | ArrayViewInterface<T>} source - The source array or ArrayView to create a view from.
    * @param {object} options - Options for configuring the view.
    * @param {number[]} options.indexes - The indexes array specifying the indexes of elements in the source array.
    * @param {boolean} [options.readonly] - Optional flag to indicate whether the view should be readonly.
@@ -244,7 +256,7 @@ export class ArrayIndexListView<T> extends ArrayView<T> {
    * @constructor
    */
   constructor(
-    source: Array<T> | ArrayView<T>,
+    source: Array<T> | ArrayViewInterface<T>,
     {
       indexes,
       readonly,
@@ -297,7 +309,7 @@ export class ArrayMaskView<T> extends ArrayIndexListView<T> {
   /**
    * Constructs a new ArrayMaskView instance with the specified source array or ArrayView and boolean mask.
    *
-   * @param {Array<T> | ArrayView<T>} source - The source array or ArrayView to create a view from.
+   * @param {Array<T> | ArrayViewInterface<T>} source - The source array or ArrayView to create a view from.
    * @param {object} options - Options for configuring the view.
    * @param {boolean[]} options.mask - The boolean mask for including or excluding elements from the source array.
    * @param {boolean} [options.readonly] - Optional flag to indicate whether the view should be readonly.
@@ -305,7 +317,7 @@ export class ArrayMaskView<T> extends ArrayIndexListView<T> {
    * @constructor
    */
   constructor(
-    source: Array<T> | ArrayView<T>,
+    source: Array<T> | ArrayViewInterface<T>,
     {
       mask,
       readonly,
@@ -343,7 +355,7 @@ export class ArraySliceView<T> extends ArrayView<T> {
   /**
    * Constructs a new ArraySliceView instance with the specified source array or ArrayView and slice range.
    *
-   * @param {Array<T> | ArrayView<T>} source - The source array or ArrayView to create a view from.
+   * @param {Array<T> | ArrayViewInterface<T>} source - The source array or ArrayView to create a view from.
    * @param {object} options - Options for configuring the view.
    * @param {Slice} options.slice - The slice range specifying the subset of elements to include in the view.
    * @param {boolean} [options.readonly] - Optional flag to indicate whether the view should be readonly.
@@ -351,7 +363,7 @@ export class ArraySliceView<T> extends ArrayView<T> {
    * @constructor
    */
   constructor(
-    source: Array<T> | ArrayView<T>,
+    source: Array<T> | ArrayViewInterface<T>,
     {
       slice,
       readonly,

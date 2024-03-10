@@ -10,7 +10,7 @@ import { ArrayViewInterface } from "./types";
  * with a subset of elements from the original array or ArrayView.
  *
  * @template T
- * @param {Array<T> | ArrayView<T>} source - The source array or ArrayView to create a view from.
+ * @param {Array<T> | ArrayViewInterface<T>} source - The source array or ArrayView to create a view from.
  * @param {boolean} [readonly] - Optional flag to indicate whether the view should be readonly.
  * @returns {ArrayView<T>} The created ArrayView instance.
  *
@@ -61,7 +61,7 @@ export function slice(slice: string | Array<number | undefined> | Slice): SliceS
  *
  * This function allows you to create a selector that masks elements based on a boolean mask array.
  *
- * @param {Array<boolean> | ArrayView<boolean>} mask - The boolean mask array or ArrayView to create the selector from.
+ * @param {Array<boolean> | ArrayViewInterface<boolean>} mask - The boolean mask array or ArrayView to create the selector from.
  *
  * @returns {MaskSelector} The created MaskSelector instance.
  *
@@ -73,7 +73,7 @@ export function slice(slice: string | Array<number | undefined> | Slice): SliceS
  * console.log(filteredView);
  * // [1, 3, 4]
  */
-export function mask(mask: Array<boolean> | ArrayView<boolean>): MaskSelector {
+export function mask(mask: Array<boolean> | ArrayViewInterface<boolean>): MaskSelector {
   return new MaskSelector(mask);
 }
 
@@ -82,7 +82,7 @@ export function mask(mask: Array<boolean> | ArrayView<boolean>): MaskSelector {
  *
  * This function allows you to create a selector for specifying a list of indexes to include in the selection.
  *
- * @param {Array<number> | ArrayView<number>} indexes - The array of indexes or IndexList to create the selector from.
+ * @param {Array<number> | ArrayViewInterface<number>} indexes - The array of indexes or IndexList to create the selector from.
  *
  * @returns {IndexListSelector} The created IndexListSelector instance.
  *
@@ -94,6 +94,6 @@ export function mask(mask: Array<boolean> | ArrayView<boolean>): MaskSelector {
  * console.log(filteredView);
  * // [1, 3, 5]
  */
-export function select(indexes: Array<number> | ArrayView<number>): IndexListSelector {
+export function select(indexes: Array<number> | ArrayViewInterface<number>): IndexListSelector {
   return new IndexListSelector(indexes);
 }
