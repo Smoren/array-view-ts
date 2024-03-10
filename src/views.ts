@@ -328,7 +328,6 @@ export class ArrayMaskView<T> extends ArrayIndexListView<T> {
   }
 }
 
-
 /**
  * Class representing a slice-based view of an array or another ArrayView
  * for accessing elements within a specified slice range.
