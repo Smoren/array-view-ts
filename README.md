@@ -38,6 +38,8 @@ originalView.loc['::-1']; // [9, 8, 7, 6, 5, 4, 3, 2, 1]
 
 originalView.loc[2]; // 3
 originalView.loc[4]; // 5
+originalView.loc[-1]; // 9
+originalView.loc[-2]; // 8
 
 originalView.loc['1:7:2'] = [22, 44, 66];
 originalArray; // [1, 22, 3, 44, 5, 66, 7, 8, 9]

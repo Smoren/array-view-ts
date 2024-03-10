@@ -21,12 +21,12 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
    * Source array of the view.
    * @protected
    */
-  protected readonly source: Array<T>;
+  public readonly source: Array<T>;
   /**
    * Parent view (exists if source is another array view).
    * @protected
    */
-  protected readonly parentView?: ArrayView<T>;
+  protected readonly parentView?: ArrayViewInterface<T>;
 
   /**
    * Creates an ArrayView instance from the given source array or ArrayView.
@@ -37,12 +37,12 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
    *
    * @template T
    *
-   * @param {Array<T> | ArrayView<T>} source - The source array or ArrayView to create a view from.
+   * @param {Array<T> | ArrayViewInterface<T>} source - The source array or ArrayView to create a view from.
    * @param {boolean} [readonly] - Optional flag to indicate whether the view should be readonly.
    *
    * @returns {ArrayView<T>} An ArrayView instance based on the source array or ArrayView.
    */
-  public static toView<T>(source: Array<T> | ArrayView<T>, readonly?: boolean): ArrayView<T> {
+  public static toView<T>(source: Array<T> | ArrayViewInterface<T>, readonly?: boolean): ArrayView<T> {
     if (!(source instanceof ArrayView)) {
       return new ArrayView(source, { readonly });
     }
@@ -64,12 +64,12 @@ export class ArrayView<T> implements ArrayViewInterface<T> {
    * @constructor
    */
   constructor(
-    source: Array<T> | ArrayView<T>,
+    source: Array<T> | ArrayViewInterface<T>,
     { readonly }: { readonly?: boolean } = {},
   ) {
-    const loc = (source instanceof ArrayView) ? source.loc : source;
-    this.source = (source instanceof ArrayView) ? source.source : source;
-    this.parentView = (source instanceof ArrayView) ? source : undefined;
+    const loc = Array.isArray(source) ? source : source.loc;
+    this.source = Array.isArray(source) ? source : source.source;
+    this.parentView = Array.isArray(source) ? undefined : source;
     this.readonly = readonly ?? ((source instanceof ArrayView) ? (source as ArrayView<T>).readonly : false);
 
     if ((source instanceof ArrayView) && source.readonly && !this.readonly) {

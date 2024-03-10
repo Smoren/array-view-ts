@@ -1,6 +1,7 @@
 import { ArrayView } from "./views";
 import { Slice } from "./structs";
 import { IndexListSelector, MaskSelector, SliceSelector } from "./selectors";
+import { ArrayViewInterface } from "./types";
 
 /**
  * Creates an ArrayView instance from the provided source array or ArrayView.
@@ -23,7 +24,7 @@ import { IndexListSelector, MaskSelector, SliceSelector } from "./selectors";
  * const filteredView = view(originalArrayView, false);
  * // Modify the filtered view affecting the original array
  */
-export function view<T>(source: Array<T> | ArrayView<T>, readonly?: boolean): ArrayView<T> {
+export function view<T>(source: Array<T> | ArrayViewInterface<T>, readonly?: boolean): ArrayView<T> {
   return ArrayView.toView(source, readonly);
 }
 
