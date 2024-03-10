@@ -29,6 +29,7 @@ it("Subview example", () => {
   expect(originalView.subview(mask([true, false, true, false, true])).toArray()).toEqual([1, 3, 5]);
   expect(originalView.subview(select([1, 2, 4])).toArray()).toEqual([2, 3, 5]);
   expect(originalView.subview(slice('::-1')).toArray()).toEqual([5, 4, 3, 2, 1]);
+  expect(originalView.subview(slice([,,-1])).toArray()).toEqual([5, 4, 3, 2, 1]);
 
   originalView.subview(mask([true, false, true, false, true])).apply((x: number) => x * 10);
   expect(originalArray).toEqual([10, 2, 30, 4, 50]);

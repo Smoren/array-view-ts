@@ -226,3 +226,67 @@ function dataProviderForNormalize(): Array<unknown> {
     [':3:-1', 10, '9:3:-1', [9, 8, 7, 6, 5, 4]],
   ];
 }
+
+describe.each([
+  ...dataProviderForIsSliceArrayTrue(),
+] as Array<[Array<number>]>)(
+  "Is Slice Array",
+  (input: Array<number>) => {
+    it("", () => {
+      expect(Slice.isSliceArray(input)).toBeTruthy();
+    });
+  },
+);
+
+function dataProviderForIsSliceArrayTrue(): Array<unknown> {
+  return [
+    [[]],
+    [[,]],
+    [[,,]],
+    [[0]],
+    [[0,]],
+    [[0,,]],
+    [[1,,]],
+    [[1,0,]],
+    [[1,1,]],
+    [[-1,1,]],
+    [[1,,1]],
+    [[1,,2]],
+    [[,,1]],
+    [[,,-1]],
+    [[1,10,-1]],
+  ];
+}
+
+describe.each([
+  ...dataProviderForIsSliceArrayFalse(),
+] as Array<[Array<number>]>)(
+  "Is Slice Array",
+  (input: Array<number>) => {
+    it("", () => {
+      expect(Slice.isSliceArray(input)).toBeFalsy();
+    });
+  },
+);
+
+function dataProviderForIsSliceArrayFalse(): Array<unknown> {
+  return [
+    [['']],
+    [['a']],
+    [[0, 1, 'a']],
+    [[0, 1, 2, 3]],
+    [[1.1, 1, 2]],
+    [[1, 1, 2.2]],
+    [null],
+    [0],
+    [1],
+    [0.0],
+    [1.0],
+    [true],
+    [false],
+    [{}],
+    [{a: 1}],
+    [[{}]],
+    [[{a: 1}]],
+  ];
+}

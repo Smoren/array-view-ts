@@ -33,7 +33,7 @@ export function view<T>(source: Array<T> | ArrayViewInterface<T>, readonly?: boo
  *
  * This function allows you to create a selector for defining a subset of elements based on a slice range.
  *
- * @param {string | Slice} slice - The slice string or Slice object to create the selector from.
+ * @param {string | Array<number | undefined> | Slice} slice - The slice string or Slice object to create the selector from.
  *
  * @returns {SliceSelector} The created SliceSelector instance.
  *
@@ -52,7 +52,7 @@ export function view<T>(source: Array<T> | ArrayViewInterface<T>, readonly?: boo
  * const slicedArray = view.loc[sliceSelector.toString()];
  * console.log(slicedArray);
  * // [2, 3, 4] */
-export function slice(slice: string | Slice): SliceSelector {
+export function slice(slice: string | Array<number | undefined> | Slice): SliceSelector {
   return new SliceSelector(Slice.toSlice(slice));
 }
 

@@ -55,6 +55,7 @@ const originalView = view(originalArray);
 originalView.subview(mask([true, false, true, false, true])).toArray(); // [1, 3, 5]
 originalView.subview(select([1, 2, 4])).toArray(); // [2, 3, 5]
 originalView.subview(slice('::-1')).toArray(); // [5, 4, 3, 2, 1]
+originalView.subview(slice([,,-1])).toArray(); // [5, 4, 3, 2, 1]
 
 originalView.subview(mask([true, false, true, false, true])).apply((x: number) => x * 10);
 originalArray; // [10, 2, 30, 4, 50]
