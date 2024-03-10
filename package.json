@@ -1,6 +1,6 @@
 {
   "name": "array-view",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Create array views for easy data manipulation, select elements using Python-like slice notation, enable efficient selection of elements using index lists and boolean masks.",
   "license": "MIT",
   "repository": {
@@ -41,6 +41,7 @@
     "slice",
     "array",
     "array-view",
+    "data-view",
     "selector",
     "collection",
     "python-like"

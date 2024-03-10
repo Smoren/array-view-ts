@@ -27,6 +27,10 @@ export interface ArrayViewInterface<T> {
    * Flag indicating if the view is read-only.
    */
   readonly readonly: boolean;
+  /**
+   * Base source array.
+   */
+  readonly source: Array<T>;
 
   /**
    * Returns the array representation of the view.

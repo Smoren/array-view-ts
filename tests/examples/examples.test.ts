@@ -15,6 +15,8 @@ it("Slicing example", () => {
 
   expect(originalView.loc[2]).toEqual(3);
   expect(originalView.loc[4]).toEqual(5);
+  expect(originalView.loc[-1]).toEqual(9);
+  expect(originalView.loc[-2]).toEqual(8);
 
   originalView.loc['1:7:2'] = [22, 44, 66];
   expect(originalArray).toEqual([1, 22, 3, 44, 5, 66, 7, 8, 9])
@@ -36,13 +38,30 @@ it("Combined example", () => {
   const originalArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   const subview = view(originalArray)
-    .subview('::2')                               // [1, 3, 5, 7, 9]
+    .subview('::2') // [1, 3, 5, 7, 9]
     .subview(mask([true, false, true, true, true])) // [1, 5, 7, 9]
-    .subview(select([0, 1, 2]))                   // [1, 5, 7]
-    .subview('1:')                                // [5, 7]
+    .subview(select([0, 1, 2])) // [1, 5, 7]
+    .subview('1:') // [5, 7]
 
   expect(subview.toArray()).toEqual([5, 7]);
 
   subview.loc[':'] = [55, 77];
+  expect(originalArray).toEqual([1, 2, 3, 4, 55, 6, 77, 8, 9, 10]);
+});
+
+it("Another combined example", () => {
+  const originalArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  const subview = view(originalArray)
+    .subview('::2') // [1, 3, 5, 7, 9]
+    .subview(mask([true, false, true, true, true])); // [1, 5, 7, 9]
+
+  const anotherSubview = view(subview)
+    .subview(select([0, 1, 2])) // [1, 5, 7]
+    .subview('1:') // [5, 7]
+
+  expect([...anotherSubview]).toEqual([5, 7]);
+
+  anotherSubview.loc[':'] = [55, 77];
   expect(originalArray).toEqual([1, 2, 3, 4, 55, 6, 77, 8, 9, 10]);
 });
