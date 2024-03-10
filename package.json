@@ -36,15 +36,21 @@
   ],
   "keywords": [
     "array-view",
-    "array-viewer",
-    "view",
     "slice",
+    "slicing",
     "array",
-    "array-view",
-    "data-view",
+    "array-index",
+    "indexing",
+    "negative-indexes",
+    "negative",
+    "range",
     "selector",
     "collection",
-    "python-like"
+    "collections",
+    "python-like",
+    "array-viewer",
+    "view",
+    "data-view"
   ],
   "devDependencies": {
     "@borderless/ts-scripts": "^0.13.6",
