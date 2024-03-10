@@ -33,7 +33,7 @@ export function view<T>(source: Array<T> | ArrayViewInterface<T>, readonly?: boo
  *
  * This function allows you to create a selector for defining a subset of elements based on a slice range.
  *
- * @param {string | Array<number | undefined> | Slice} slice - The slice string or Slice object to create the selector from.
+ * @param {string | Array<number | undefined> | Slice} slice - The slice string/array or Slice object to create the selector from.
  *
  * @returns {SliceSelector} The created SliceSelector instance.
  *
