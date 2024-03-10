@@ -187,6 +187,7 @@ describe.each([
 
       // Then
       expect(v.toArray()).toEqual(expected);
+      expect([...v]).toEqual(expected);
     });
   },
 );
