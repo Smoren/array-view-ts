@@ -49,6 +49,17 @@ it("Combined example", () => {
   expect(originalArray).toEqual([1, 2, 3, 4, 55, 6, 77, 8, 9, 10]);
 });
 
+it("Mask example", () => {
+  const array1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const array2 = [-1, -2, -3, -4, -5, -6, -7, -8, -9, -10];
+
+  const mask = view(array1).is((x: number) => x % 3 === 0);
+  expect([...view(array1).subview(mask)]).toEqual([3, 6, 9]);
+
+  view(array2).subview(mask).applyWith(view(array1).subview(mask), (lhs: number, rhs: number) => lhs + rhs);
+  expect(array2).toEqual([-1, -2, 0, -4, -5, 0, -7, -8, 0, -10]);
+});
+
 it("Another combined example", () => {
   const originalArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 

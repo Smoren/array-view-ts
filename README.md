@@ -76,6 +76,26 @@ subview.loc[':'] = [55, 77];
 originalArray; // [1, 2, 3, 4, 55, 6, 77, 8, 9, 10]
 ```
 
+### Mask example
+```typescript
+import { view, mask } from "array-view";
+
+const array1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const array2 = [-1, -2, -3, -4, -5, -6, -7, -8, -9, -10];
+
+const mask = view(array1).is((x: number) => x % 3 === 0);
+// MaskSelector([false, false, true, false, false, true, false, false, true, false])
+
+view(array2)
+  .subview(mask)
+  .applyWith(
+    view(array1).subview(mask),
+    (lhs: number, rhs: number) => lhs + rhs,
+  )
+  .toArray();
+// [-1, -2, 0, -4, -5, 0, -7, -8, 0, -10]);
+```
+
 ## Contributing
 Contributions are welcome! Feel free to open an issue or submit a pull request on the [GitHub repository](https://github.com/Smoren/array-view-ts).
 
