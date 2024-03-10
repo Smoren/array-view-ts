@@ -1,6 +1,6 @@
 import { ArrayMaskView, ArrayIndexListView, ArraySliceView, ArrayView } from "./views";
 import { Slice } from "./structs";
-import { ArraySelectorInterface } from "./types";
+import { ArraySelectorInterface, ArrayViewInterface } from "./types";
 
 /**
  * Represents an index list selector that selects elements based on the provided array of indexes.
@@ -16,9 +16,9 @@ export class IndexListSelector implements ArraySelectorInterface {
   /**
    * Creates a new IndexListSelector instance with the provided array of indexes.
    *
-   * @param {Array<number> | ArrayView<number>} value - The array of indexes or array view containing indexes.
+   * @param {Array<number> | ArrayViewInterface<number>} value - The array of indexes or array view containing indexes.
    */
-  constructor(value: Array<number> | ArrayView<number>) {
+  constructor(value: Array<number> | ArrayViewInterface<number>) {
     this.value = value instanceof Array ? value : value.toArray();
   }
 
@@ -27,12 +27,12 @@ export class IndexListSelector implements ArraySelectorInterface {
    *
    * @template T - The type of elements in the source array view.
    *
-   * @param {ArrayView<T>} source - The source array view to select elements from.
+   * @param {ArrayViewInterface<T>} source - The source array view to select elements from.
    * @param {boolean} [readonly] - Whether the selection should be read-only.
    *
    * @returns {ArrayIndexListView<T>} The view containing the selected elements.
    */
-  public select<T>(source: ArrayView<T>, readonly?: boolean): ArrayIndexListView<T> {
+  public select<T>(source: ArrayViewInterface<T>, readonly?: boolean): ArrayIndexListView<T> {
     return new ArrayIndexListView<T>(source, { indexes: this.value, readonly: readonly ?? source.readonly });
   }
 }
@@ -51,9 +51,9 @@ export class MaskSelector implements ArraySelectorInterface {
   /**
    * Creates a new MaskSelector instance with the provided array of boolean mask values.
    *
-   * @param {Array<boolean> | ArrayView<boolean>} value - The array or array view of boolean mask values.
+   * @param {Array<boolean> | ArrayViewInterface<boolean>} value - The array or array view of boolean mask values.
    */
-  constructor(value: Array<boolean> | ArrayView<boolean>) {
+  constructor(value: Array<boolean> | ArrayViewInterface<boolean>) {
     this.value = value instanceof Array ? value : value.toArray();
   }
 
@@ -62,12 +62,12 @@ export class MaskSelector implements ArraySelectorInterface {
    *
    * @template T - The type of elements in the source array view.
    *
-   * @param {ArrayView<T>} source - The source array to select elements from.
+   * @param {ArrayViewInterface<T>} source - The source array to select elements from.
    * @param {boolean} [readonly] - Whether the selection should be read-only.
    *
    * @returns {ArrayMaskView<T>} The view containing the selected elements.
    */
-  public select<T>(source: ArrayView<T>, readonly?: boolean): ArrayMaskView<T> {
+  public select<T>(source: ArrayViewInterface<T>, readonly?: boolean): ArrayMaskView<T> {
     return new ArrayMaskView<T>(source, { mask: this.value, readonly: readonly ?? source.readonly });
   }
 }
@@ -95,12 +95,12 @@ export class SliceSelector extends Slice implements ArraySelectorInterface {
    *
    * @template T - The type of elements in the source array.
    *
-   * @param {ArrayView<T>} source - The source array to select elements from.
+   * @param {ArrayViewInterface<T>} source - The source array to select elements from.
    * @param {boolean} [readonly] - Whether the selection should be read-only.
    *
    * @returns {ArraySliceView<T>} The view containing the selected elements.
    */
-  public select<T>(source: ArrayView<T>, readonly?: boolean): ArraySliceView<T> {
+  public select<T>(source: ArrayViewInterface<T>, readonly?: boolean): ArraySliceView<T> {
     return new ArraySliceView<T>(source, { slice: this, readonly: readonly ?? source.readonly });
   }
 }

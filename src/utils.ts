@@ -17,3 +17,7 @@ export function normalizeIndex(index: number, containerLength: number, throwErro
   }
   return index < 0 ? containerLength + index : index;
 }
+
+export function isCountable(target: any): boolean {
+  return target.length !== undefined;
+}
