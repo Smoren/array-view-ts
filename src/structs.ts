@@ -95,40 +95,56 @@ export class Slice {
    * @returns {NormalizedSlice} The normalized slice parameters.
    */
   public normalize(containerLength: number): NormalizedSlice {
-    // TODO: Need refactor
     let step = this.step ?? 1;
 
-    if (step === 0) {
-      throw new IndexError("Step cannot be 0.");
+    if (step > 0) {
+      let start = this.start ?? 0;
+      let end = this.end ?? containerLength;
+
+      [start, end, step] = [Math.round(start), Math.round(end), Math.round(step)];
+
+      start = normalizeIndex(start, containerLength, false);
+      end = normalizeIndex(end, containerLength, false);
+
+      if (start >= containerLength) {
+        start = end = containerLength - 1;
+      }
+
+      start = this.squeezeInBounds(start, 0, containerLength - 1);
+      end = this.squeezeInBounds(end, 0, containerLength);
+
+      if (end < start) {
+        end = start;
+      }
+
+      return new NormalizedSlice(start, end, step);
+    } else if (step < 0) {
+      let start = this.start ?? containerLength - 1;
+      let end = this.end ?? -1;
+
+      [start, end, step] = [Math.round(start), Math.round(end), Math.round(step)];
+
+      start = normalizeIndex(start, containerLength, false);
+
+      if (!(this.end === undefined)) {
+        end = normalizeIndex(end, containerLength, false);
+      }
+
+      if (start < 0) {
+        start = end = 0;
+      }
+
+      start = this.squeezeInBounds(start, 0, containerLength - 1);
+      end = this.squeezeInBounds(end, -1, containerLength);
+
+      if (end > start) {
+        end = start;
+      }
+
+      return new NormalizedSlice(start, end, step);
     }
 
-    let defaultEnd = (step < 0 && this.end === undefined) ? -1 : undefined;
-
-    let start = this.start ?? (step > 0 ? 0 : containerLength - 1);
-    let end = this.end ?? (step > 0 ? containerLength : -1);
-
-    start = Math.round(start);
-    end = Math.round(end);
-    step = Math.round(step);
-
-    start = normalizeIndex(start, containerLength, false);
-    end = normalizeIndex(end, containerLength, false);
-
-    if (step > 0 && start >= containerLength) {
-      start = end = containerLength - 1;
-    } else if (step < 0 && start < 0) {
-      start = end = 0;
-      defaultEnd = 0;
-    }
-
-    start = this.squeezeInBounds(start, 0, containerLength - 1);
-    end = this.squeezeInBounds(end, step > 0 ? 0 : -1, containerLength);
-
-    if ((step > 0 && end < start) || (step < 0 && end > start)) {
-      end = start;
-    }
-
-    return new NormalizedSlice(start, defaultEnd ?? end, step);
+    throw new IndexError("Step cannot be 0.");
   }
 
   /**
