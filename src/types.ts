@@ -55,7 +55,7 @@ export interface ArrayViewInterface<T> {
    *
    * @returns {ArraySelectorInterface} Boolean mask for selecting elements that satisfy the predicate.
    */
-  is(predicate: (value: T) => boolean): ArraySelectorInterface;
+  is(predicate: (value: T) => boolean): MaskSelectorInterface;
 
   /**
    * Returns a subview of this view based on a selector or string slice.
@@ -106,6 +106,80 @@ export interface ArrayViewInterface<T> {
 }
 
 /**
+ * Represents a slice definition for selecting a range of elements.
+ */
+export interface SliceInterface {
+  /**
+   * The start index of the slice range.
+   */
+  readonly start: number | undefined;
+  /**
+   * The end index of the slice range.
+   */
+  readonly end: number | undefined;
+  /**
+   * The step size for selecting elements in the slice range.
+   */
+  readonly step: number | undefined;
+
+  /**
+   * Normalizes the slice parameters based on the container length.
+   *
+   * @param {number} containerLength - The length of the container or array.
+   *
+   * @returns {NormalizedSlice} The normalized slice parameters.
+   */
+  normalize(containerLength: number): NormalizedSliceInterface;
+
+  /**
+   * Returns the string representation of the Slice.
+   *
+   * @returns {string} The string representation of the Slice.
+   */
+  toString(): string;
+}
+
+/**
+ * Represents a normalized slice definition with start, end, and step values.
+ */
+export interface NormalizedSliceInterface extends SliceInterface {
+  /**
+   * The start index of the normalized slice.
+   */
+  readonly start: number;
+  /**
+   * The end index of the normalized slice.
+   */
+  readonly end: number;
+  /**
+   * The step size for selecting elements in the normalized slice.
+   */
+  readonly step: number;
+  /**
+   * Returns the length of the normalized slice.
+   *
+   * @type {number}
+   */
+  readonly length: number;
+
+  /**
+   * Converts the provided index to the actual index based on the normalized slice parameters.
+   *
+   * @param {number} i - The index to convert.
+   *
+   * @returns {number} The converted index value.
+   */
+  convertIndex(i: number): number;
+
+  /**
+   * Generate an iterator for iterating over the elements in the normalized slice range.
+   *
+   * @returns {IterableIterator<number>} An iterator for the normalized slice range.
+   */
+  toRange(): IterableIterator<number>;
+}
+
+/**
  * Interface for selecting elements from an array view.
  */
 export interface ArraySelectorInterface {
@@ -121,6 +195,31 @@ export interface ArraySelectorInterface {
    */
   select<T>(source: ArrayViewInterface<T>, readonly?: boolean): ArrayViewInterface<T>;
 }
+
+/**
+ * Interface for selecting elements from an array view by boolean mask.
+ */
+export interface MaskSelectorInterface extends ArraySelectorInterface {
+  /**
+   * Boolean mask array.
+   */
+  readonly value: Array<boolean>;
+}
+
+/**
+ * Interface for selecting elements from an array view by boolean mask.
+ */
+export interface IndexListSelectorInterface extends ArraySelectorInterface {
+  /**
+   * Index list array.
+   */
+  readonly value: Array<number>;
+}
+
+/**
+ * Interface for selecting elements from an array view by slice.
+ */
+export interface SliceSelectorInterface extends ArraySelectorInterface, SliceInterface {}
 
 /**
  * Type representing an array that can be sliced.

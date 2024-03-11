@@ -1,13 +1,19 @@
-import { ArrayMaskView, ArrayIndexListView, ArraySliceView, ArrayView } from "./views";
+import { ArrayMaskView, ArrayIndexListView, ArraySliceView } from "./views";
 import { Slice } from "./structs";
-import { ArraySelectorInterface, ArrayViewInterface } from "./types";
+import {
+  ArraySelectorInterface,
+  ArrayViewInterface,
+  IndexListSelectorInterface,
+  MaskSelectorInterface,
+  SliceSelectorInterface,
+} from "./types";
 
 /**
  * Represents an index list selector that selects elements based on the provided array of indexes.
  *
- * @implements {ArraySelectorInterface}
+ * @implements {IndexListSelectorInterface}
  */
-export class IndexListSelector implements ArraySelectorInterface {
+export class IndexListSelector implements IndexListSelectorInterface {
   /**
    * The array of indexes to select elements from.
    */
@@ -40,9 +46,9 @@ export class IndexListSelector implements ArraySelectorInterface {
 /**
  * Represents a mask selector that selects elements based on the provided array of boolean mask values.
  *
- * @implements {ArraySelectorInterface}
+ * @implements {MaskSelectorInterface}
  */
-export class MaskSelector implements ArraySelectorInterface {
+export class MaskSelector implements MaskSelectorInterface {
   /**
    * The array of boolean mask values to select elements based on.
    */
@@ -79,7 +85,7 @@ export class MaskSelector implements ArraySelectorInterface {
  *
  * @implements {ArraySelectorInterface}
  */
-export class SliceSelector extends Slice implements ArraySelectorInterface {
+export class SliceSelector extends Slice implements SliceSelectorInterface {
   /**
    * Creates a new SliceSelector instance with the provided slice parameters.
    *
