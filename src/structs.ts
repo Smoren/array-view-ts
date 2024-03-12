@@ -90,7 +90,7 @@ export class Slice {
       return false;
     }
 
-    if(!(s.length >= 0 && s.length <= 3)) {
+    if (!(s.length >= 0 && s.length <= 3)) {
       return false;
     }
 

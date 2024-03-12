@@ -138,9 +138,9 @@ function dataProviderForToSlice(): Array<unknown> {
 
 describe.each([
   ...dataProviderForToString(),
-] as Array<[string, [number?, number?, number?]]>)(
+] as Array<[string, string]>)(
   "Slice To String",
-  (input: string, expected: [number?, number?, number?]) => {
+  (input: string, expected: string) => {
     it("", () => {
       // When
       const slice = Slice.toSlice(input);
@@ -177,9 +177,9 @@ function dataProviderForToString(): Array<unknown> {
 
 describe.each([
   ...dataProviderForNormalize(),
-] as Array<[string, number, [number?, number?, number?], Array<number>]>)(
+] as Array<[string, number, string, Array<number>]>)(
   "Slice Normalize",
-  (input: string, length: number, expected: [number?, number?, number?], expectedIndexes: Array<number>) => {
+  (input: string, length: number, expected: string, expectedIndexes: Array<number>) => {
     it("", () => {
       // Given
       const slice = Slice.toSlice(input);
@@ -230,7 +230,7 @@ function dataProviderForNormalize(): Array<unknown> {
 describe.each([
   ...dataProviderForIsSliceArrayTrue(),
 ] as Array<[Array<number>]>)(
-  "Is Slice Array",
+  "Is Slice Array True",
   (input: Array<number>) => {
     it("", () => {
       expect(Slice.isSliceArray(input)).toBeTruthy();
@@ -261,7 +261,7 @@ function dataProviderForIsSliceArrayTrue(): Array<unknown> {
 describe.each([
   ...dataProviderForIsSliceArrayFalse(),
 ] as Array<[Array<number>]>)(
-  "Is Slice Array",
+  "Is Slice Array False",
   (input: Array<number>) => {
     it("", () => {
       expect(Slice.isSliceArray(input)).toBeFalsy();
