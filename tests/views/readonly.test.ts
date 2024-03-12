@@ -87,30 +87,30 @@ function dataProviderForReadonly(): Array<unknown> {
   return [
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true),
+      (source: Array<number>) => view(source, true),
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(view(source, true), true),
+      (source: Array<number>) => view(view(source, true), true),
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2'),
       [1, 3, 5, 7, 9],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2', true)
         .subview(mask([true, false, true, false, true])),
       [1, 5, 9],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2')
         .subview(mask([true, false, true, false, true]))
         .subview(select([0, 2])),
@@ -118,7 +118,7 @@ function dataProviderForReadonly(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2')
         .subview(mask([true, false, true, false, true]))
         .subview(select([0, 2]))
@@ -127,7 +127,7 @@ function dataProviderForReadonly(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview(mask([true, false, true, false, true, false, true, false, true, false]))
         .subview(mask([true, false, true, false, true]))
         .subview(mask([true, false, true]))
@@ -136,7 +136,7 @@ function dataProviderForReadonly(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview(mask([true, false, true, false, true, false, true, false, true, false]))
         .subview(mask([true, false, true, false, true]))
         .subview(mask([true, false, true])),
@@ -144,7 +144,7 @@ function dataProviderForReadonly(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview(select([0, 2, 4, 6, 8]))
         .subview(select([0, 2, 4]))
         .subview(select([0, 2]))
@@ -153,7 +153,7 @@ function dataProviderForReadonly(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2')
         .subview('::2')
         .subview('::2'),
@@ -161,7 +161,7 @@ function dataProviderForReadonly(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2')
         .subview('::2')
         .subview('::2')
@@ -175,26 +175,26 @@ function dataProviderForReadonlySubview(): Array<unknown> {
   return [
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source)
+      (source: Array<number>) => view(source)
         .subview('::2', true),
       [1, 3, 5, 7, 9],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => (new ArrayView(new ArrayView(source)))
+      (source: Array<number>) => (new ArrayView(new ArrayView(source)))
         .subview('::2', true),
       [1, 3, 5, 7, 9],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source)
+      (source: Array<number>) => view(source)
         .subview('::2', true)
         .subview(mask([true, false, true, false, true])),
       [1, 5, 9],
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview(mask([true, false, true, false, true]), true)
         .subview(select([0, 2])),
@@ -202,7 +202,7 @@ function dataProviderForReadonlySubview(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source)
+      (source: Array<number>) => view(source)
         .subview('::2', true)
         .subview(mask([true, false, true, false, true]))
         .subview(select([0, 2]), true)
@@ -211,7 +211,7 @@ function dataProviderForReadonlySubview(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source)
+      (source: Array<number>) => view(source)
         .subview(mask([true, false, true, false, true, false, true, false, true, false]), true)
         .subview(mask([true, false, true, false, true]), true)
         .subview(mask([true, false, true]), true)
@@ -220,7 +220,7 @@ function dataProviderForReadonlySubview(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview(mask([true, false, true, false, true, false, true, false, true, false]))
         .subview(mask([true, false, true, false, true]))
         .subview(mask([true, false, true]), true),
@@ -228,7 +228,7 @@ function dataProviderForReadonlySubview(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source)
+      (source: Array<number>) => view(source)
         .subview(select([0, 2, 4, 6, 8]))
         .subview(select([0, 2, 4]))
         .subview(select([0, 2]))
@@ -237,7 +237,7 @@ function dataProviderForReadonlySubview(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview('::2', true)
         .subview('::2'),
@@ -245,7 +245,7 @@ function dataProviderForReadonlySubview(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source)
+      (source: Array<number>) => view(source)
         .subview('::2')
         .subview('::2')
         .subview('::2')
@@ -282,30 +282,30 @@ function dataProviderForReadonlyError(): Array<unknown> {
   return [
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2', false),
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(view(source), true)
+      (source: Array<number>) => view(view(source), true)
         .subview('::2', false),
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2')
         .subview(mask([true, false, true, false, true]), false),
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source)
+      (source: Array<number>) => view(source)
         .subview('::2', true)
         .subview(mask([true, false, true, false, true]))
         .subview(select([0, 2]), false),
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2', false)
         .subview(mask([true, false, true, false, true]))
         .subview(select([0, 2]))
@@ -313,7 +313,7 @@ function dataProviderForReadonlyError(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, false)
+      (source: Array<number>) => view(source, false)
         .subview(mask([true, false, true, false, true, false, true, false, true, false]))
         .subview(mask([true, false, true, false, true]), true)
         .subview(mask([true, false, true]), false)
@@ -321,14 +321,14 @@ function dataProviderForReadonlyError(): Array<unknown> {
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, true)
+      (source: Array<number>) => view(source, true)
         .subview('::2', false)
         .subview('::2')
         .subview('::2'),
     ],
     [
       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      (source: ArrayView<number>) => view(source, false)
+      (source: Array<number>) => view(source, false)
         .subview('::2', true)
         .subview('::2', false)
         .subview('::2', true)
