@@ -194,6 +194,11 @@ export interface ArraySelectorInterface {
    * @returns {ArrayViewInterface<T>} A new view with selected elements from the source.
    */
   select<T>(source: ArrayViewInterface<T>, readonly?: boolean): ArrayViewInterface<T>;
+
+  /**
+   * TODO docs
+   */
+  compatibleWith<T>(view: ArrayViewInterface<T>): boolean
 }
 
 /**

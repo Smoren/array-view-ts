@@ -1,12 +1,12 @@
 import { ArrayMaskView, ArrayIndexListView, ArraySliceView } from "./views";
 import { Slice } from "./structs";
 import {
-  ArraySelectorInterface,
   ArrayViewInterface,
   IndexListSelectorInterface,
   MaskSelectorInterface,
   SliceSelectorInterface,
 } from "./types";
+import { IndexError } from "./excpetions";
 
 /**
  * Represents an index list selector that selects elements based on the provided array of indexes.
@@ -39,7 +39,18 @@ export class IndexListSelector implements IndexListSelectorInterface {
    * @returns {ArrayIndexListView<T>} The view containing the selected elements.
    */
   public select<T>(source: ArrayViewInterface<T>, readonly?: boolean): ArrayIndexListView<T> {
+    if (!this.compatibleWith(source)) {
+      throw new IndexError('Some indexes are out of range.');
+    }
     return new ArrayIndexListView<T>(source, { indexes: this.value, readonly: readonly ?? source.readonly });
+  }
+
+  /**
+   * TODO
+   */
+  public compatibleWith<T>(view: ArrayViewInterface<T>): boolean {
+    return this.value.length === 0 ||
+      Math.max(...this.value) < view.length && Math.min(...this.value) >= -view.length;
   }
 }
 
@@ -76,6 +87,13 @@ export class MaskSelector implements MaskSelectorInterface {
   public select<T>(source: ArrayViewInterface<T>, readonly?: boolean): ArrayMaskView<T> {
     return new ArrayMaskView<T>(source, { mask: this.value, readonly: readonly ?? source.readonly });
   }
+
+  /**
+   * TODO
+   */
+  public compatibleWith<T>(view: ArrayViewInterface<T>): boolean {
+    return this.value.length === view.length;
+  }
 }
 
 /**
@@ -108,5 +126,12 @@ export class SliceSelector extends Slice implements SliceSelectorInterface {
    */
   public select<T>(source: ArrayViewInterface<T>, readonly?: boolean): ArraySliceView<T> {
     return new ArraySliceView<T>(source, { slice: this, readonly: readonly ?? source.readonly });
+  }
+
+  /**
+   * TODO
+   */
+  public compatibleWith(): boolean {
+    return true;
   }
 }
