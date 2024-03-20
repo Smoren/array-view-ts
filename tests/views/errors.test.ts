@@ -1,4 +1,4 @@
-import { view, mask, slice, IndexError, KeyError, LengthError, ArrayView } from "../../src";
+import { view, mask, slice, IndexError, KeyError, LengthError, ArrayView, select } from "../../src";
 
 describe.each([
   ...dataProviderForIndexError(),
@@ -348,3 +348,37 @@ function dataProviderForWriteLengthError(): Array<unknown> {
     ],
   ];
 }
+
+// describe.each([
+//   ...dataProviderForIndexListReadIncompatibleError(),
+// ] as Array<[Array<number>, Array<number>]>)(
+//   "Index List Read Incompatible Error Test",
+//   (
+//     source: Array<number>,
+//     indexes: Array<number>,
+//   ) => {
+//     it("", () => {
+//       // Given
+//       const v = view(source);
+//
+//       try {
+//         // When
+//         v.subview(select(indexes));
+//         expect(true).toBe(false);
+//       } catch (e) {
+//         // Then
+//         expect(e instanceof IndexError).toBe(true);
+//         expect((e as IndexError).message).toEqual("Step cannot be 0.");
+//       }
+//     });
+//   },
+// );
+//
+// function dataProviderForIndexListReadIncompatibleError(): Array<unknown> {
+//   return [
+//     [[], [0]],
+//     [[], [1]],
+//     [[], [-1]],
+//     [[], [-1, 0, 1]],
+//   ];
+// }
