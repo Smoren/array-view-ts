@@ -1,4 +1,4 @@
-import { ArrayView, mask, select, view, ReadonlyError } from "../../src";
+import { ArrayView, mask, select, view, ReadonlyError } from "../../../src";
 
 describe.each([
   ...dataProviderForReadonly(),
