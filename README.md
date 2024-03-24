@@ -7,6 +7,8 @@
 [![Minified Size](https://badgen.net/bundlephobia/minzip/array-view)](https://bundlephobia.com/result?p=array-view)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![Array View Logo](docs/images/logo.png)
+
 **Array View** is a TypeScript library that provides a powerful set of utilities for working with arrays in
 a versatile and efficient manner. These classes enable developers to create views of arrays, manipulate data with ease,
 and select specific elements using index lists, masks, and slice parameters.
